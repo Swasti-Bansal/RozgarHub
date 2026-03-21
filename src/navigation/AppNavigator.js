@@ -17,6 +17,8 @@ import HereJobScreen    from '../screens/HereJobScreen';
 import RateJobScreen    from '../screens/RateJobScreen';
 import ActiveJobsScreen from '../screens/ActiveJobsScreen';
 import JobDetailScreen  from '../screens/JobDetailScreen';
+import JobDetailFullScreen from '../screens/JobDetailFullScreen';
+import JobHistoryScreen    from '../screens/JobHistoryScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -111,6 +113,16 @@ const AppNavigator = () => {
           component={JobDetailScreen}
           options={{ title: 'Job Details' }}
         />
+        <Stack.Screen 
+          name="JobDetailFull" 
+          component={JobDetailFullScreen}
+          options={{ headerShown: false }}
+          />
+        <Stack.Screen
+         name="JobHistory"    
+         component={JobHistoryScreen}    
+         options={{ headerShown: false }} 
+         />
       </Stack.Navigator>
     </NavigationContainer>
   );
