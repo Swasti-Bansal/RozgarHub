@@ -657,6 +657,247 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontWeight: 'bold',
   },
+
+  statsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 20,
+    marginBottom: 10,
+  },
+
+  statCardPrimary: {
+    flex: 1,
+    backgroundColor: '#4A90E2',
+    padding: 18,
+    borderRadius: 18,
+    marginRight: 8,
+
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 3 },
+  },
+
+  statCardSecondary: {
+    flex: 1,
+    backgroundColor: '#ffffff',
+    padding: 18,
+    borderRadius: 18,
+    marginLeft: 8,
+
+    borderWidth: 1,
+    borderColor: '#eee',
+
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOpacity: 0.08,
+    shadowRadius: 5,
+    shadowOffset: { width: 0, height: 2 },
+  },
+
+  statNumber: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#ffffff',
+  },
+
+  statLabel: {
+    fontSize: 13,
+    color: '#E0E7FF',
+    marginTop: 6,
+  },
+
+  statNumberDark: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#111',
+  },
+
+  statLabelDark: {
+    fontSize: 13,
+    color: '#666',
+    marginTop: 6,
+  },
+
+  homeTopBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    backgroundColor: '#fff',
+    paddingHorizontal: 18,
+    paddingTop: 16,
+    paddingBottom: 14,
+    borderBottomWidth: 0.5,
+    borderBottomColor: '#E0E0E0',
+  },
+  homeTopBarLeft: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 10,
+  },
+  homeTopBarRight: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  homeAvatar: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: '#E8F4F8',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  homeAvatarEmoji: { fontSize: 24 },
+  homeNamaste: { fontSize: 14, color: '#7F8C8D' },
+  homeWorkerName: { fontSize: 20, fontWeight: '700', color: '#2C3E50', lineHeight: 26 },
+  homeLocation: { fontSize: 14, color: '#7F8C8D', marginTop: 2 },
+  homeIconBtn: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    borderWidth: 0.5,
+    borderColor: '#E0E0E0',
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  homeIconBtnText: { fontSize: 20 },
+ 
+  // ── Stats row ──
+  homeStatsRow: {
+    flexDirection: 'row',
+    gap: 8,
+    marginBottom: 16,
+  },
+  homeStatCard: {
+    flex: 1,
+    backgroundColor: '#fff',
+    borderRadius: 14,
+    borderWidth: 0.5,
+    borderColor: '#E0E0E0',
+    padding: 14,
+  },
+  homeStatCardPrimary: {
+    backgroundColor: '#4A90E2',
+    borderColor: '#4A90E2',
+  },
+  homeStatNum: { fontSize: 24, fontWeight: '700'},
+  homeStatNumPrimary: { color: '#fff' },
+  homeStatNumDark: { color: '#2C3E50' },
+  homeStatLbl: { fontSize: 13, marginTop: 4 },
+  homeStatLblPrimary: { color: '#B5D4F4' },
+  homeStatLblDark: { color: '#7F8C8D'},
+  homeStatSub: { fontSize: 12, marginTop: 4 },
+  homeStatSubPrimary: { color: '#85B7EB' },
+  homeStatSubDark: { color: '#3B6D11' },
+ 
+  // ── Quick actions ──
+  homeQaRow: {
+    flexDirection: 'row',
+    gap: 8,
+    marginBottom: 20,
+  },
+  homeQaCard: {
+    flex: 1,
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    borderWidth: 0.5,
+    borderColor: '#E0E0E0',
+    padding: 12,
+    alignItems: 'center',
+    gap: 8,
+  },
+  homeQaIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  homeQaIconText: { fontSize: 24 },
+  homeQaLabel: { fontSize: 13, color: '#7F8C8D', fontWeight: '600' },
+ 
+  // ── Section header ──
+  homeSectionHead: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 14,
+  },
+  homeCountBadge: {
+    backgroundColor: '#E8F4FF',
+    borderRadius: 20,
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+  },
+  homeCountBadgeText: { fontSize: 13, color: '#185FA5', fontWeight: '600' },
+ 
+  // ── Ongoing job card ──
+  ongoingJobCard: {
+    backgroundColor: '#fff',
+    borderRadius: 14,
+    borderWidth: 0.5,
+    borderColor: '#E0E0E0',
+    marginBottom: 12,
+    flexDirection: 'row',
+    overflow: 'hidden',
+  },
+  ongoingJobAccent: { width: 5 },
+  ongoingJobBody: { flex: 1, padding: 15 },
+  ongoingJobTop: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
+  ongoingJobTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 4,
+  },
+  ongoingJobTitle: { fontSize: 18, fontWeight: '700', color: '#2C3E50' },
+  ongoingJobLoc: { fontSize: 14, color: '#7F8C8D' },
+  ongoingJobPayCol: { alignItems: 'flex-end', marginLeft: 8 },
+  ongoingJobPay: { fontSize: 18, fontWeight: '700', color: '#5CB85C' },
+  ongoingJobDur: { fontSize: 13, color: '#7F8C8D', marginTop: 3 },
+  ongoingJobMeta: { fontSize: 14, color: '#7F8C8D', marginBottom: 3 },
+ 
+  // ── Status badge ──
+  statusBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    gap: 5,
+  },
+  statusDot: { width: 7, height: 7, borderRadius: 4 },
+  statusBadgeText: { fontSize: 13, fontWeight: '600' },
+ 
+  // ── Job card action buttons ──
+  ongoingJobActions: {
+    flexDirection: 'row',
+    gap: 10,
+    marginTop: 12,
+  },
+  jobBtnGhost: {
+    flex: 1,
+    borderWidth: 0.5,
+    borderColor: '#E0E0E0',
+    borderRadius: 10,
+    paddingVertical: 10,
+    alignItems: 'center',
+  },
+  jobBtnGhostText: { fontSize: 14, color: '#2C3E50', fontWeight: '600' },
+  jobBtnDone: {
+    flex: 1,
+    backgroundColor: '#EAF3DE',
+    borderRadius: 10,
+    paddingVertical: 10,
+    alignItems: 'center',
+  },
+  jobBtnDoneText: { fontSize: 14, color: '#27500A', fontWeight: '700' },
 });
 
 export default styles;
