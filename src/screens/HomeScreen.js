@@ -21,7 +21,7 @@ const stats = [
 
 const quickActions = [
   { id: 'findwork', icon: '💼', label: 'Find Work', bg: '#E6F1FB', screen: 'HereJob' },
-  { id: 'history', icon: '📜', label: 'History',   bg: '#FAECE7', screen: 'History' },
+  { id: 'history', icon: '📜', label: 'History',   bg: '#FAECE7', screen: 'JobHistory' },
   { id: 'reviews', icon: '⭐', label: 'Reviews',   bg: '#FAEEDA', screen: 'Review' },
 ];
 
