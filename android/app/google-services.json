@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "217705718600",
+    "project_id": "rozgarhub-fc610",
+    "storage_bucket": "rozgarhub-fc610.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:217705718600:android:b569881c4b13ca3b5f897d",
+        "android_client_info": {
+          "package_name": "com.rozgarhub"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvTKc5aHtHiDK_-w8xzYlZ6GqMU1n6w5I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
