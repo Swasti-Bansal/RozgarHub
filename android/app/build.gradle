@@ -19,9 +19,11 @@ react {
 
     /* Variants */
     //   The list of variants to that are debuggable. For those we're going to
+
     //   skip the bundling of the JS bundle and the assets. By default is just 'debug'.
     //   If you add flavors like lite, prod, etc. you'll have to list your debuggableVariants.
     // debuggableVariants = ["liteDebug", "prodDebug"]
+
 
     /* Bundling */
     //   A list containing the node command and its flags. Default is just 'node'.
@@ -84,7 +86,9 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+
         missingDimensionStrategy 'react-native-camera', 'general'
+
     }
     signingConfigs {
         debug {
@@ -111,11 +115,17 @@ android {
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
+
     implementation "com.google.android.gms:play-services-maps:18.2.0"
+
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
     } else {
         implementation jscFlavor
     }
 }
+
 apply plugin: 'com.google.gms.google-services'
+
+apply plugin: 'com.google.gms.google-services'
+
