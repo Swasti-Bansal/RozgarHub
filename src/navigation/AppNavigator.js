@@ -1,4 +1,8 @@
 // src/navigation/AppNavigator.js
+
+// Updated — adds OTPVerifyScreen and checks auth state on launch
+
+
 import React, { useEffect, useState } from 'react';
 import { StatusBar, ActivityIndicator, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
