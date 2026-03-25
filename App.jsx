@@ -1,12 +1,16 @@
-// App.js
+// App.jsx
 import React from 'react';
+import { UserProvider }        from './src/context/UserContext';
 import { TranslationProvider } from './src/context/TranslationContext';
-import AppNavigator from './src/navigation/AppNavigator';
-
+import AppNavigator            from './src/navigation/AppNavigator';
+ 
 const App = () => (
-  <TranslationProvider>
-    <AppNavigator />
-  </TranslationProvider>
+  <UserProvider>
+    <TranslationProvider>
+      <AppNavigator />
+    </TranslationProvider>
+  </UserProvider>
 );
-
+ 
 export default App;
+ 
