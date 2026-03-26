@@ -6,7 +6,7 @@ import {
   View, Text, ScrollView, TouchableOpacity,
   StyleSheet, StatusBar, SafeAreaView, Alert, Switch, TextInput, ActivityIndicator,
 } from 'react-native';
-import { postJob } from '../services/dbService';
+import { postJob } from '../services/dbService'; 
 
 const JOB_CATEGORIES = [
   { label: 'Mason',       icon: '🧱', color: '#FF6B6B' },

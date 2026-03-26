@@ -7,10 +7,9 @@ import {
   TextInput,
   TouchableOpacity,
   ActivityIndicator,
+  KeyboardAvoidingView,
   Platform,
   ScrollView,
-  KeyboardAvoidingView,   // ← add back
-  StyleSheet,
 } from 'react-native';
 import styles from '../styles/commonStyles';
 import { sendOTP } from '../services/authService';
@@ -24,13 +23,17 @@ const COUNTRY_CODES = [
   { code: '+44',  flag: '🇬🇧', name: 'UK'    },
   { code: '+971', flag: '🇦🇪', name: 'UAE'   },
 ];
+
 const WelcomeScreen = ({ navigation }) => {
   const [phoneNumber, setPhoneNumber]   = useState('');
   const [selectedCode, setSelectedCode] = useState(COUNTRY_CODES[0]);
   const [showPicker, setShowPicker]     = useState(false);
   const [loading, setLoading]           = useState(false);
   const [error, setError]               = useState('');
+
+  // ── Translated placeholder from old version ──
   const [placeholderMobile] = useTranslatedText('Enter mobile number');
+
   const handleSendOTP = async () => {
     setError('');
     const cleaned = phoneNumber.replace(/\s/g, '');
@@ -50,142 +53,123 @@ const WelcomeScreen = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      {/* ── KeyboardAvoidingView keeps bottom section above keyboard ── */}
+    <SafeAreaView style={styles.welcomeRoot}>
       <KeyboardAvoidingView
-        style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'android' ? 0 : 0}
+        style={{ flex: 1 }}
       >
         <ScrollView
           contentContainerStyle={{ flexGrow: 1 }}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
-          <View style={styles.screenContainer}>
 
-            {/* ── Logo — unchanged ── */}
-            <View style={styles.header}>
-              <View style={styles.logoContainer}>
-                <Text style={styles.logoIcon}>🔨</Text>
-                <Text style={styles.logoText}>RozgarHub</Text>
-              </View>
+          {/* ── Hero ── */}
+          <View style={styles.welcomeHero}>
+            <View style={styles.welcomeDecorCircle1} />
+            <View style={styles.welcomeDecorCircle2} />
+            <View style={styles.welcomeDecorCircle3} />
+
+            {/* LanguagePicker from old version instead of plain button ── */}
+            <View style={styles.welcomeLangBtn}>
               <LanguagePicker />
             </View>
 
-            {/* ── Hero — unchanged ── */}
-            <View style={styles.contentCenter}>
-              <T style={styles.mainTitle}>
-                Find trusted local workers or jobs near you
-              </T>
-              <Text style={{ fontSize: 60, marginVertical: 20 }}>📍</Text>
-              <View style={styles.infoBox}>
-                <T style={styles.infoLabel}>Workers on platform</T>
-                <Text style={styles.infoValue}>⭐ 11,658+</Text>
+            {/* Logo row */}
+            <View style={styles.welcomeLogoRow}>
+              <View style={styles.welcomeLogoIconBox}>
+                <Text style={{ fontSize: 28 }}>👷</Text>
               </View>
+              <Text style={styles.welcomeLogoName}>RozgarHub</Text>
             </View>
 
-            {/* ── Phone Input ── */}
-            <View style={styles.bottomSection}>
-              <T style={[styles.inputLabel, { marginBottom: 8 }]}>
-                Mobile Number
-              </T>
+            {/* Tagline — using T for translation ── */}
+            <T style={styles.welcomeTagline}>
+              Find trusted work{'\n'}near you, instantly
+            </T>
+            <T style={styles.welcomeTaglineSub}>
+              Connecting skilled workers with local jobs
+            </T>
 
-              <View style={ws.phoneRow}>
-                <TouchableOpacity
-                  style={ws.codeBox}
-                  onPress={() => setShowPicker(!showPicker)}
-                >
-                  <Text style={ws.codeText}>
-                    {selectedCode.flag} {selectedCode.code} ▾
-                  </Text>
-                </TouchableOpacity>
-
-                <TextInput
-                  style={ws.phoneInput}
-                  placeholder={placeholderMobile}
-                  placeholderTextColor="#999"
-                  keyboardType="phone-pad"
-                  maxLength={13}
-                  value={phoneNumber}
-                  onChangeText={(v) => { setError(''); setPhoneNumber(v); }}
-                  // ↓ These two lines fix the invisible text issue
-                  color="#2C3E50"
-                  selectionColor="#4A90E2"
-                />
+            {/* Trust badges */}
+            <View style={styles.welcomeBadgeRow}>
+              <View style={styles.welcomeBadge}>
+                <T style={styles.welcomeBadgeText}>✓  Free to join</T>
               </View>
+              <View style={styles.welcomeBadge}>
+                <T style={styles.welcomeBadgeText}>✓  Work on your schedule</T>
+              </View>
+            </View>
+          </View>
 
-              {showPicker && (
-                <View style={ws.pickerDropdown}>
-                  {COUNTRY_CODES.map(c => (
-                    <TouchableOpacity
-                      key={c.code}
-                      style={ws.pickerItem}
-                      onPress={() => { setSelectedCode(c); setShowPicker(false); }}
-                    >
-                      <Text style={ws.pickerItemText}>
-                        {c.flag}  {c.name}  ({c.code})
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              )}
+          {/* ── Bottom input panel ── */}
+          <View style={styles.welcomeBottom}>
 
-              {!!error && <Text style={ws.errorText}>{error}</Text>}
+            <T style={styles.welcomeBottomTitle}>Enter your mobile number</T>
+            <T style={styles.welcomeBottomSub}>We'll send you a one-time verification code</T>
 
+            <View style={styles.welcomePhoneRow}>
               <TouchableOpacity
-                style={[styles.primaryButton, loading && { opacity: 0.7 }]}
-                onPress={handleSendOTP}
-                disabled={loading}
+                style={styles.welcomeCodeBox}
+                onPress={() => setShowPicker(!showPicker)}
               >
-                {loading
-                  ? <ActivityIndicator color="#FFF" />
-                  : <T style={styles.primaryButtonText}>Send OTP</T>
-                }
+                <Text style={styles.welcomeCodeText}>
+                  {selectedCode.flag} {selectedCode.code} ▾
+                </Text>
               </TouchableOpacity>
-
-              <TouchableOpacity>
-                <T style={styles.linkText}>Why Mobile Number?</T>
-              </TouchableOpacity>
+              <TextInput
+                style={styles.welcomePhoneInput}
+                placeholder={placeholderMobile}
+                placeholderTextColor="#AAB0B7"
+                keyboardType="phone-pad"
+                maxLength={13}
+                value={phoneNumber}
+                onChangeText={(t) => { setError(''); setPhoneNumber(t); }}
+                color="#2C3E50"
+                selectionColor="#4A90E2"
+              />
             </View>
+
+            {showPicker && (
+              <View style={styles.welcomePickerDropdown}>
+                {COUNTRY_CODES.map((c) => (
+                  <TouchableOpacity
+                    key={c.code}
+                    style={styles.welcomePickerItem}
+                    onPress={() => { setSelectedCode(c); setShowPicker(false); }}
+                  >
+                    <Text style={styles.welcomePickerItemText}>
+                      {c.flag}  {c.name}  ({c.code})
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            )}
+
+            {!!error && <Text style={styles.welcomeErrorText}>{error}</Text>}
+
+            <TouchableOpacity
+              style={[styles.welcomeOtpBtn, loading ? { opacity: 0.7 } : null]}
+              onPress={handleSendOTP}
+              disabled={loading}
+              activeOpacity={0.85}
+            >
+              {loading
+                ? <ActivityIndicator color="#FFF" />
+                : <T style={styles.welcomeOtpBtnText}>Send OTP  →</T>
+              }
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.welcomeWhyLink}>
+              <T style={styles.welcomeWhyLinkText}>Why do we need your number?</T>
+            </TouchableOpacity>
 
           </View>
+
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
-
-const ws = StyleSheet.create({
-  phoneRow: { flexDirection: 'row', marginBottom: 12 },
-  codeBox: {
-    backgroundColor: '#FFF', borderRadius: 12,
-    paddingHorizontal: 12, paddingVertical: 14,
-    borderWidth: 1, borderColor: '#E0E0E0',
-    marginRight: 8, justifyContent: 'center',
-  },
-  codeText: { fontSize: 15, color: '#2C3E50', fontWeight: '600' },
-  phoneInput: {
-    flex: 1,
-    backgroundColor: '#FFF',
-    borderRadius: 12,
-    paddingHorizontal: 14,
-    fontSize: 16,
-    borderWidth: 1,
-    borderColor: '#E0E0E0',
-    color: '#2C3E50',          // ← explicit text color
-    minHeight: 50,             // ← ensures input is always visible
-  },
-  pickerDropdown: {
-    backgroundColor: '#FFF', borderRadius: 12,
-    borderWidth: 1, borderColor: '#E0E0E0',
-    marginBottom: 10, elevation: 4,
-    shadowColor: '#000', shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1, shadowRadius: 4,
-  },
-  pickerItem:     { padding: 14, borderBottomWidth: 1, borderBottomColor: '#F0F0F0' },
-  pickerItemText: { fontSize: 15, color: '#2C3E50' },
-  errorText:      { color: '#E74C3C', fontSize: 13, marginBottom: 10, marginLeft: 4 },
-});
 
 export default WelcomeScreen;

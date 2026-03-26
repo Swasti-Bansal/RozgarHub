@@ -1,6 +1,3 @@
-// src/screens/JobDetailFullScreen.js
-// Job detail screen — content adapts based on who is viewing (worker or employer)
-
 import React, { useState } from 'react';
 import {
   SafeAreaView,
@@ -11,8 +8,8 @@ import {
   StyleSheet,
 } from 'react-native';
 import styles from '../styles/commonStyles';
+import Header from '../components/Header';
 
-// Mock job data — replace with real navigation params or API call
 const JOB = {
   id: 'job_001',
   title: 'Mason',
@@ -273,11 +270,9 @@ const JobDetailFullScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Header title="Job Detail" navigation={navigation} />
       {/* ── Top Bar ── */}
       <View style={localStyles.topBar}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={localStyles.backBtn}>
-          <Text style={localStyles.backText}>← Back</Text>
-        </TouchableOpacity>
         <View style={[
           localStyles.perspectiveBadge,
           perspective === 'employer' && localStyles.perspectiveBadgeEmployer,
@@ -341,7 +336,6 @@ const JobDetailFullScreen = ({ navigation, route }) => {
           ))}
         </View>
 
-        {/* ── Content by perspective + tab ── */}
         {perspective === 'worker'   && activeTab === 'Overview'  && <WorkerOverview />}
         {perspective === 'worker'   && activeTab === 'Employer'  && <WorkerEmployerTab />}
         {perspective === 'employer' && activeTab === 'Overview'  && <EmployerOverview />}

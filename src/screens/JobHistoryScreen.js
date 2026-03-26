@@ -7,6 +7,7 @@ import {
 import styles from '../styles/commonStyles';
 import T from '../components/T';
 import useTranslatedText from '../hooks/useTranslatedText';
+import Header from '../components/Header';
 
 const FILTER_TABS = ['All', 'Completed', 'Cancelled'];
 
@@ -134,15 +135,8 @@ const JobHistoryScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.screenContainer} showsVerticalScrollIndicator={false}>
-
-        {/* ── Page Header ── */}
-        <View style={localStyles.pageHeader}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <T style={localStyles.backText}>← Back</T>
-          </TouchableOpacity>
-          <T style={styles.screenTitle}>Job History</T>
-          <T style={styles.screenSubtitle}>Your previous work</T>
-        </View>
+        <Header title="Job History" navigation={navigation} />
+        <T style={styles.screenSubtitle}>Your previous work</T>
 
         {/* ── Summary Cards ── */}
         <View style={localStyles.summaryRow}>
