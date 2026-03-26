@@ -1,6 +1,3 @@
-// src/screens/OTPVerifyScreen.js
-// After successful OTP verification, creates/merges user doc in Firestore
-
 import React, { useState, useRef, useEffect } from 'react';
 import {
   SafeAreaView, View, Text, TextInput, TouchableOpacity,
@@ -10,6 +7,7 @@ import styles from '../styles/commonStyles';
 import { verifyOTP, sendOTP } from '../services/authService';
 import { createUserProfile } from '../services/dbService';
 import T from '../components/T';
+import Header from '../components/Header';
 
 const OTP_LENGTH      = 6;
 const RESEND_COUNTDOWN = 30;
@@ -106,12 +104,7 @@ const OTPVerifyScreen = ({ navigation, route }) => {
         style={{ flex: 1 }}
       >
         <View style={styles.screenContainer}>
-
-          <TouchableOpacity style={s.backButton} onPress={() => navigation.goBack()}>
-            <T style={s.backText}>← Back</T>
-          </TouchableOpacity>
-
-          <T style={styles.screenTitle}>Verify OTP</T>
+          <Header title="Verify OTP" navigation={navigation} />
           <T style={styles.screenSubtitle}>Enter the 6-digit code sent to</T>
           <Text style={[styles.screenSubtitle, s.phoneHighlight]}>{maskedPhone}</Text>
 

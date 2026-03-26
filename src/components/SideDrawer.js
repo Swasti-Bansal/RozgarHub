@@ -14,6 +14,7 @@ import {
 import auth from '@react-native-firebase/auth';
 import { useUser } from '../context/UserContext';
 import LanguagePicker from './LanguagePicker';
+import T from './T';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const DRAWER_WIDTH = SCREEN_WIDTH * 0.75;
@@ -82,7 +83,7 @@ const SideDrawer = ({ visible, onClose, navigation }) => {
     : [
         { icon: '💼', label: 'Find Work',   screen: 'HereJob',     bg: '#EBF3FD' },
         { icon: '📋', label: 'Job History', screen: 'JobHistory',  bg: '#FFF3DC' },
-        { icon: '⭐', label: 'Reviews',     screen: null,          bg: '#FFF9E6' },
+        { icon: '⭐', label: 'Reviews',     screen: 'Review',      bg: '#FFF9E6' },
       ];
 
   const handleNavigate = (screen) => {
@@ -138,7 +139,7 @@ const SideDrawer = ({ visible, onClose, navigation }) => {
               <View style={[s.menuIconBox, { backgroundColor: item.bg }]}>
                 <Text style={s.menuIcon}>{item.icon}</Text>
               </View>
-              <Text style={s.menuLabel}>{item.label}</Text>
+              <T style={s.menuLabel}>{item.label}</T>
               <Text style={s.menuArrow}>›</Text>
             </TouchableOpacity>
           ))}
@@ -151,7 +152,7 @@ const SideDrawer = ({ visible, onClose, navigation }) => {
           <View style={s.menuIconBox}>
             <Text style={s.menuIcon}>🌐</Text>
           </View>
-          <Text style={s.languageLabel}>Language</Text>
+          <T style={s.languageLabel}>Language</T>
           <LanguagePicker />
         </View>
 
@@ -160,12 +161,12 @@ const SideDrawer = ({ visible, onClose, navigation }) => {
           <View style={[s.menuIconBox, { backgroundColor: '#FEECEC' }]}>
             <Text style={s.menuIcon}>🚪</Text>
           </View>
-          <Text style={s.logoutText}>Logout</Text>
+          <T style={s.logoutText}>Logout</T>
         </TouchableOpacity>
 
         {/* ── Footer ── */}
         <View style={s.drawerFooter}>
-          <Text style={s.versionText}>RozgarHub</Text>
+          <T style={s.versionText}>RozgarHub</T>
         </View>
 
       </Animated.View>

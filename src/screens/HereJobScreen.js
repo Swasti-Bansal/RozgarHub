@@ -1,23 +1,32 @@
 // src/screens/HereJobScreen.js
 import React, { useEffect, useState } from 'react';
 import {
-  SafeAreaView, ScrollView, View, Text, TouchableOpacity,
-  PermissionsAndroid, Platform, ActivityIndicator,
+  SafeAreaView,
+  ScrollView,
+  View,
+  Text,
+  TouchableOpacity,
+  PermissionsAndroid,
+  Platform,
+  ActivityIndicator,
 } from 'react-native';
 import WebView from 'react-native-webview';
 import Geolocation from 'react-native-geolocation-service';
 import styles from '../styles/commonStyles';
+import Header from '../components/Header';
 import T from '../components/T';
 import useTranslatedText from '../hooks/useTranslatedText';
 
+// ── Job avatar meta ───────────────────────────────────────────────
 const JOB_META = {
-  Mason:      { letter: 'M',  color: '#4A90E2', bg: '#EAF2FB' },
-  Electrician:{ letter: 'E',  color: '#E65100', bg: '#FFF3E0' },
-  Painter:    { letter: 'P',  color: '#6A1B9A', bg: '#F3E5F5' },
-  Plumber:    { letter: 'Pl', color: '#00695C', bg: '#E0F2F1' },
-  Carpenter:  { letter: 'Ca', color: '#558B2F', bg: '#F1F8E9' },
+  Mason:       { letter: 'M',  color: '#4A90E2', bg: '#EAF2FB' },
+  Electrician: { letter: 'E',  color: '#E65100', bg: '#FFF3E0' },
+  Painter:     { letter: 'P',  color: '#6A1B9A', bg: '#F3E5F5' },
+  Plumber:     { letter: 'Pl', color: '#00695C', bg: '#E0F2F1' },
+  Carpenter:   { letter: 'Ca', color: '#558B2F', bg: '#F1F8E9' },
 };
 
+// ── Pure helpers outside component ───────────────────────────────
 const getJobsNearLocation = (lat, lng) => [
   { id: 1, title: 'Mason',       pay: '600', unit: '/day', lat: lat + 0.008, lng: lng + 0.005 },
   { id: 2, title: 'Electrician', pay: '700', unit: '',     lat: lat - 0.01,  lng: lng - 0.008 },
@@ -71,81 +80,97 @@ const getMapHTML = (lat, lng, jobs) => {
   </script></body></html>`;
 };
 
-// ── Single job card with its own useTranslatedText hook ──────────
+// ── Job card component with translation ──────────────────────────
 const JobCard = ({ job, onPress }) => {
   const meta = JOB_META[job.title] || { letter: job.title[0], color: '#4A90E2', bg: '#EAF2FB' };
-
-  // Translate dynamic job fields + static card labels together
-  const [title, fullDay, accept, newLabel] = useTranslatedText(
-    job.title, 'Full Day', 'Accept', 'New',
+  const [title, fullDay, viewDetails, newLabel] = useTranslatedText(
+    job.title, 'Full Day', 'View Details', 'New',
   );
 
   return (
-    <View style={[styles.jobCard, { borderLeftWidth: 4, borderLeftColor: '#4A90E2' }]}>
-      {/* Top row */}
-      <View style={styles.jobCardHeader}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
+    <View key={job.id} style={styles.ongoingJobCard}>
+      <View style={[styles.ongoingJobAccent, { backgroundColor: '#4A90E2' }]} />
+      <View style={[styles.ongoingJobBody, { paddingVertical: 12 }]}>
+
+        <View style={styles.jobCardHeader}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
+            <View style={{
+              width: 42,
+              height: 42,
+              borderRadius: 10,
+              backgroundColor: meta.bg,
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginRight: 12,
+            }}>
+              <Text style={{ fontSize: 15, fontWeight: '800', color: meta.color }}>
+                {meta.letter}
+              </Text>
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.jobTitle}>{title}</Text>
+              <Text style={styles.jobPayment}>
+                {'\u20B9'}{job.pay}{job.unit}
+              </Text>
+              <Text style={styles.jobLocation}>📍 Near your location</Text>
+            </View>
+          </View>
+          <View style={styles.jobBadge}>
+            <Text style={styles.jobBadgeText}>{newLabel}</Text>
+          </View>
+        </View>
+
+        {/* Divider */}
+        <View style={{ height: 1, backgroundColor: '#F0F0F0', marginVertical: 10 }} />
+
+        {/* Footer */}
+        <View style={styles.jobCardFooter}>
           <View style={{
-            width: 42, height: 42, borderRadius: 10,
-            backgroundColor: meta.bg, alignItems: 'center',
-            justifyContent: 'center', marginRight: 12,
+            flexDirection: 'row',
+            alignItems: 'center',
+            backgroundColor: '#F5F7FA',
+            paddingHorizontal: 10,
+            paddingVertical: 5,
+            borderRadius: 8,
           }}>
-            <Text style={{ fontSize: 15, fontWeight: '800', color: meta.color }}>
-              {meta.letter}
-            </Text>
+            <View style={{ width: 7, height: 7, borderRadius: 4, backgroundColor: '#4A90E2', marginRight: 5 }} />
+            <Text style={styles.jobTiming}>{fullDay}</Text>
           </View>
-          <View style={{ flex: 1 }}>
-            <Text style={styles.jobTitle}>{title}</Text>
-            <Text style={styles.jobPayment}>₹{job.pay}{job.unit}</Text>
-          </View>
+          <TouchableOpacity
+            style={[styles.acceptButtonSmall, {
+              backgroundColor: '#5CB85C',
+              paddingHorizontal: 22,
+              borderRadius: 10,
+              shadowColor: '#5CB85C',
+              shadowOffset: { width: 0, height: 3 },
+              shadowOpacity: 0.35,
+              shadowRadius: 5,
+              elevation: 4,
+            }]}
+            onPress={onPress}
+          >
+            <Text style={styles.acceptButtonText}>{viewDetails}</Text>
+          </TouchableOpacity>
         </View>
-        <View style={styles.jobBadge}>
-          <Text style={styles.jobBadgeText}>{newLabel}</Text>
-        </View>
-      </View>
 
-      {/* Divider */}
-      <View style={{ height: 1, backgroundColor: '#F0F0F0', marginVertical: 10 }} />
-
-      {/* Footer */}
-      <View style={styles.jobCardFooter}>
-        <View style={{
-          flexDirection: 'row', alignItems: 'center',
-          backgroundColor: '#F5F7FA', paddingHorizontal: 10,
-          paddingVertical: 5, borderRadius: 8,
-        }}>
-          <View style={{ width: 7, height: 7, borderRadius: 4, backgroundColor: '#4A90E2', marginRight: 5 }} />
-          <Text style={styles.jobTiming}>{fullDay}</Text>
-        </View>
-        <TouchableOpacity
-          style={[styles.acceptButtonSmall, {
-            backgroundColor: '#4A90E2', paddingHorizontal: 22,
-            borderRadius: 10, shadowColor: '#4A90E2',
-            shadowOffset: { width: 0, height: 3 },
-            shadowOpacity: 0.35, shadowRadius: 5, elevation: 4,
-          }]}
-          onPress={onPress}
-        >
-          <Text style={styles.acceptButtonText}>{accept}</Text>
-        </TouchableOpacity>
       </View>
     </View>
   );
 };
 
-// ── Main Screen ───────────────────────────────────────────────────
+// ── Main screen ───────────────────────────────────────────────────
 const HereJobScreen = ({ navigation }) => {
   const [location,   setLocation]   = useState(null);
   const [loading,    setLoading]    = useState(true);
   const [nearbyJobs, setNearbyJobs] = useState([]);
   const [gpsLabel,   setGpsLabel]   = useState('');
 
-  // Translate all static screen-level strings
+  // ── Translate static screen strings ──
   const [
-    screenTitle, nearbyJobsOnMap, gettingLocation,
+    nearbyJobsOnMap, gettingLocation,
     recommendedJobs, nearby,
   ] = useTranslatedText(
-    'Here Job', 'Nearby Jobs on Map', 'Getting your location...',
+    'Nearby Jobs on Map', 'Getting your location...',
     'Recommended Jobs', 'Nearby',
   );
 
@@ -188,7 +213,13 @@ const HereJobScreen = ({ navigation }) => {
           setGpsLabel('GPS error (code ' + err.code + ')');
           setLoading(false);
         },
-        { enableHighAccuracy: true, timeout: 15000, maximumAge: 0, forceRequestLocation: true, showLocationDialog: true },
+        {
+          enableHighAccuracy: true,
+          timeout: 15000,
+          maximumAge: 0,
+          forceRequestLocation: true,
+          showLocationDialog: true,
+        },
       );
     } catch {
       const fb = { lat: 19.076, lng: 72.8777 };
@@ -209,10 +240,10 @@ const HereJobScreen = ({ navigation }) => {
         nestedScrollEnabled={true}
         showsVerticalScrollIndicator={false}
       >
-        {/* ── Page Title ── */}
-        <Text style={styles.screenTitle}>{screenTitle}</Text>
+        {/* ── Header ── */}
+        <Header title="Jobs Near You" navigation={navigation} />
 
-        {/* ── GPS label row ── */}
+        {/* ── GPS status ── */}
         <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 4 }}>
           <View style={{ width: 7, height: 7, borderRadius: 4, backgroundColor: '#4A90E2', marginRight: 6 }} />
           <Text style={styles.jobLocation}>{nearbyJobsOnMap}</Text>
@@ -222,10 +253,11 @@ const HereJobScreen = ({ navigation }) => {
           <View style={{
             alignSelf: 'flex-start',
             backgroundColor: isLive ? '#EAF2FB' : '#FFE5E5',
-            paddingHorizontal: 10, paddingVertical: 4,
-            borderRadius: 20, marginBottom: 12,
+            paddingHorizontal: 10,
+            paddingVertical: 4,
+            borderRadius: 20,
+            marginBottom: 12,
           }}>
-            {/* GPS status string contains dynamic numbers — keep as plain Text, no translate */}
             <Text style={{ fontSize: 11, fontWeight: '600', color: isLive ? '#4A90E2' : '#FF6B6B' }}>
               {isLive ? '● ' : '○ '}{gpsLabel}
             </Text>
@@ -236,9 +268,15 @@ const HereJobScreen = ({ navigation }) => {
 
         {/* ── Map ── */}
         <View style={{
-          height: 300, borderRadius: 12, overflow: 'hidden', marginBottom: 20,
-          shadowColor: '#000', shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.1, shadowRadius: 4, elevation: 3,
+          height: 300,
+          borderRadius: 12,
+          overflow: 'hidden',
+          marginBottom: 20,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.1,
+          shadowRadius: 4,
+          elevation: 3,
         }}>
           {loading ? (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#EAF2FB' }}>
@@ -262,10 +300,12 @@ const HereJobScreen = ({ navigation }) => {
           )}
         </View>
 
-        {/* ── Section Header ── */}
+        {/* ── Section header ── */}
         <View style={{
-          flexDirection: 'row', alignItems: 'center',
-          justifyContent: 'space-between', marginBottom: 15,
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginBottom: 15,
         }}>
           <Text style={styles.sectionTitle}>{recommendedJobs}</Text>
           <View style={{ backgroundColor: '#EAF2FB', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 20 }}>
@@ -275,12 +315,12 @@ const HereJobScreen = ({ navigation }) => {
           </View>
         </View>
 
-        {/* ── Job Cards ── */}
+        {/* ── Job cards ── */}
         {nearbyJobs.map(job => (
           <JobCard
             key={job.id}
             job={job}
-            onPress={() => navigation.navigate('JobDetail')}
+            onPress={() => navigation.navigate('JobDetailFull')}
           />
         ))}
 
