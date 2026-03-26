@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import { useUser } from '../context/UserContext';
+import LanguagePicker from './LanguagePicker';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const DRAWER_WIDTH = SCREEN_WIDTH * 0.75;
@@ -145,7 +146,16 @@ const SideDrawer = ({ visible, onClose, navigation }) => {
 
         <View style={s.divider} />
 
-        {/* ── Logout ── */}
+        {/* ── Language ── */}
+        <View style={s.languageSection}>
+          <View style={s.menuIconBox}>
+            <Text style={s.menuIcon}>🌐</Text>
+          </View>
+          <Text style={s.languageLabel}>Language</Text>
+          <LanguagePicker />
+        </View>
+
+        <View style={s.divider} />
         <TouchableOpacity style={s.logoutBtn} onPress={handleLogout} activeOpacity={0.7}>
           <View style={[s.menuIconBox, { backgroundColor: '#FEECEC' }]}>
             <Text style={s.menuIcon}>🚪</Text>
@@ -222,6 +232,16 @@ const s = StyleSheet.create({
   menuIcon:  { fontSize: 22 },
   menuLabel: { flex: 1, fontSize: 16, fontWeight: '600', color: '#1A1F36' },
   menuArrow: { fontSize: 22, color: '#9CA3AF' },
+
+  // Language
+  languageSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 14,
+    paddingHorizontal: 20,
+    paddingVertical: 14,
+  },
+  languageLabel: { flex: 1, fontSize: 16, fontWeight: '600', color: '#1A1F36' },
 
   // Logout
   logoutBtn: {

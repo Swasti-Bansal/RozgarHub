@@ -85,7 +85,7 @@ export default function PostJobScreen({ navigation }) {
         `Your job "${title}" is live! Workers will contact you shortly.`,
         [
           { text: 'Find Workers', onPress: () => navigation?.navigate('FindWorkers') },
-          { text: 'OK', style: 'cancel' },
+          { text: 'OK', onPress: () => navigation?.navigate('EmployerHome') },
         ]
       );
     } else {
