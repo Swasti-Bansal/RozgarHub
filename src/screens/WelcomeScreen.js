@@ -13,16 +13,16 @@ import {
 } from 'react-native';
 import styles from '../styles/commonStyles';
 import { sendOTP } from '../services/authService';
+import LanguagePicker from '../components/LanguagePicker';
+import T from '../components/T';
+import useTranslatedText from '../hooks/useTranslatedText';
 
 const COUNTRY_CODES = [
-  { code: '+91', flag: '🇮🇳', name: 'India' },
-  { code: '+1',  flag: '🇺🇸', name: 'USA' },
-  { code: '+44', flag: '🇬🇧', name: 'UK' },
-  { code: '+971', flag: '🇦🇪', name: 'UAE' },
+  { code: '+91',  flag: '🇮🇳', name: 'India' },
+  { code: '+1',   flag: '🇺🇸', name: 'USA'   },
+  { code: '+44',  flag: '🇬🇧', name: 'UK'    },
+  { code: '+971', flag: '🇦🇪', name: 'UAE'   },
 ];
-
-// Worker hard-hat logo with wrench inside — SVG
-
 
 const WelcomeScreen = ({ navigation }) => {
   const [phoneNumber, setPhoneNumber]   = useState('');
@@ -30,6 +30,9 @@ const WelcomeScreen = ({ navigation }) => {
   const [showPicker, setShowPicker]     = useState(false);
   const [loading, setLoading]           = useState(false);
   const [error, setError]               = useState('');
+
+  // ── Translated placeholder from old version ──
+  const [placeholderMobile] = useTranslatedText('Enter mobile number');
 
   const handleSendOTP = async () => {
     setError('');
@@ -63,16 +66,14 @@ const WelcomeScreen = ({ navigation }) => {
 
           {/* ── Hero ── */}
           <View style={styles.welcomeHero}>
-
-            {/* Decorative shapes */}
             <View style={styles.welcomeDecorCircle1} />
             <View style={styles.welcomeDecorCircle2} />
             <View style={styles.welcomeDecorCircle3} />
 
-            {/* Language button */}
-            <TouchableOpacity style={styles.welcomeLangBtn}>
-              <Text style={styles.welcomeLangText}>🌐 EN ▾</Text>
-            </TouchableOpacity>
+            {/* LanguagePicker from old version instead of plain button ── */}
+            <View style={styles.welcomeLangBtn}>
+              <LanguagePicker />
+            </View>
 
             {/* Logo row */}
             <View style={styles.welcomeLogoRow}>
@@ -82,31 +83,30 @@ const WelcomeScreen = ({ navigation }) => {
               <Text style={styles.welcomeLogoName}>RozgarHub</Text>
             </View>
 
-            {/* Tagline */}
-            <Text style={styles.welcomeTagline}>
+            {/* Tagline — using T for translation ── */}
+            <T style={styles.welcomeTagline}>
               Find trusted work{'\n'}near you, instantly
-            </Text>
-            <Text style={styles.welcomeTaglineSub}>
+            </T>
+            <T style={styles.welcomeTaglineSub}>
               Connecting skilled workers with local jobs
-            </Text>
+            </T>
 
-            {/* Trust badges row */}
+            {/* Trust badges */}
             <View style={styles.welcomeBadgeRow}>
               <View style={styles.welcomeBadge}>
-                <Text style={styles.welcomeBadgeText}>✓  Free to join</Text>
+                <T style={styles.welcomeBadgeText}>✓  Free to join</T>
               </View>
               <View style={styles.welcomeBadge}>
-                <Text style={styles.welcomeBadgeText}>✓  Work on your schedule</Text>
+                <T style={styles.welcomeBadgeText}>✓  Work on your schedule</T>
               </View>
             </View>
-
           </View>
 
           {/* ── Bottom input panel ── */}
           <View style={styles.welcomeBottom}>
 
-            <Text style={styles.welcomeBottomTitle}>Enter your mobile number</Text>
-            <Text style={styles.welcomeBottomSub}>We'll send you a one-time verification code</Text>
+            <T style={styles.welcomeBottomTitle}>Enter your mobile number</T>
+            <T style={styles.welcomeBottomSub}>We'll send you a one-time verification code</T>
 
             <View style={styles.welcomePhoneRow}>
               <TouchableOpacity
@@ -119,12 +119,14 @@ const WelcomeScreen = ({ navigation }) => {
               </TouchableOpacity>
               <TextInput
                 style={styles.welcomePhoneInput}
-                placeholder="Mobile number"
+                placeholder={placeholderMobile}
                 placeholderTextColor="#AAB0B7"
                 keyboardType="phone-pad"
                 maxLength={13}
                 value={phoneNumber}
                 onChangeText={(t) => { setError(''); setPhoneNumber(t); }}
+                color="#2C3E50"
+                selectionColor="#4A90E2"
               />
             </View>
 
@@ -154,12 +156,12 @@ const WelcomeScreen = ({ navigation }) => {
             >
               {loading
                 ? <ActivityIndicator color="#FFF" />
-                : <Text style={styles.welcomeOtpBtnText}>Send OTP  →</Text>
+                : <T style={styles.welcomeOtpBtnText}>Send OTP  →</T>
               }
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.welcomeWhyLink}>
-              <Text style={styles.welcomeWhyLinkText}>Why do we need your number?</Text>
+              <T style={styles.welcomeWhyLinkText}>Why do we need your number?</T>
             </TouchableOpacity>
 
           </View>

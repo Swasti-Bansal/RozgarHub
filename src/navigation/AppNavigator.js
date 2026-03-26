@@ -1,92 +1,94 @@
-// src/navigation/AppNavigator.js
-// Updated — adds OTPVerifyScreen and checks auth state on launch
-
 import React, { useEffect, useState } from 'react';
 import { StatusBar, ActivityIndicator, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import auth from '@react-native-firebase/auth';
+import { useUser } from '../context/UserContext';
 
-import WelcomeScreen    from '../screens/WelcomeScreen';
-import OTPVerifyScreen  from '../screens/OTPVerifyScreen';
-import GetStartedScreen from '../screens/GetStartedScreen';
-import AboutWorkScreen  from '../screens/AboutWorkScreen';
-import LoginScreen      from '../screens/LoginScreen';
-import HomeScreen       from '../screens/HomeScreen';
-import HereJobScreen    from '../screens/HereJobScreen';
-import RateJobScreen    from '../screens/RateJobScreen';
+import WelcomeScreen       from '../screens/WelcomeScreen';
+import OTPVerifyScreen     from '../screens/OTPVerifyScreen';
+import GetStartedScreen    from '../screens/GetStartedScreen';
+import AboutWorkScreen     from '../screens/AboutWorkScreen';
+import LoginScreen         from '../screens/LoginScreen';
+import HomeScreen          from '../screens/HomeScreen';
+import EmployerHomeScreen  from '../screens/EmployerHomeScreen';   
+import HereJobScreen       from '../screens/HereJobScreen';
+import RateJobScreen       from '../screens/RateJobScreen';
 import JobDetailFullScreen from '../screens/JobDetailFullScreen';
 import JobHistoryScreen    from '../screens/JobHistoryScreen';
+import FindWorkersScreen   from '../screens/FindWorkersScreen';   
+import PostJobScreen       from '../screens/PostJobScreen';       
 import ReviewScreen    from '../screens/ReviewScreen';
 
 const Stack = createNativeStackNavigator();
 
 const AppNavigator = () => {
   const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState(null);
+  const [user,         setUser]         = useState(null);
+  const { profile }                     = useUser();
 
-  // Listen for Firebase auth state changes
   useEffect(() => {
     const unsubscribe = auth().onAuthStateChanged((firebaseUser) => {
       setUser(firebaseUser);
       if (initializing) setInitializing(false);
     });
-    return unsubscribe; // cleanup on unmount
+    return unsubscribe;
   }, []);
 
-  // Show spinner while Firebase resolves the auth state
   if (initializing) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#F5F7FA' }}>
-        <ActivityIndicator size="large" color="#4A90E2" />
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#F4F6FF' }}>
+        <ActivityIndicator size="large" color="#1A6BCC" />
       </View>
     );
   }
 
+  const getInitialRoute = () => {
+    if (!user) return 'Welcome';
+    if (profile.role === 'employer') return 'EmployerHome';
+    if (profile.role === 'worker')   return 'Home';
+    return 'GetStarted';   
+  };
+
   return (
     <NavigationContainer>
-      <StatusBar barStyle="dark-content" backgroundColor="#F5F7FA" />
+      <StatusBar barStyle="dark-content" backgroundColor="#F4F6FF" />
       <Stack.Navigator
-        // If user is already logged in, go straight to Home
-        initialRouteName={user ? 'Home' : 'Welcome'}
+        initialRouteName={getInitialRoute()}
         screenOptions={{
-          headerStyle: { backgroundColor: '#4A90E2' },
-          headerTintColor: '#fff',
+          headerStyle:      { backgroundColor: '#1A6BCC' },
+          headerTintColor:  '#fff',
           headerTitleStyle: { fontWeight: 'bold' },
         }}
       >
-        {/* ── Auth Screens ── */}
-        <Stack.Screen
-          name="Welcome"
-          component={WelcomeScreen}
-          options={{ headerShown: false }}
+        {/* ── Auth ── */}
+        <Stack.Screen 
+          name="Welcome"   
+          component={WelcomeScreen}   
+          options={{ headerShown: false }} 
         />
-        <Stack.Screen
-          name="OTPVerify"
-          component={OTPVerifyScreen}
-          options={{ headerShown: false }}
-        />
-
-        {/* ── Onboarding Screens (shown once after first login) ── */}
-        <Stack.Screen
-          name="GetStarted"
-          component={GetStartedScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="AboutWork"
-          component={AboutWorkScreen}
-          options={{ headerShown: false }}
+        <Stack.Screen 
+          name="OTPVerify" 
+          component={OTPVerifyScreen} 
+          options={{ headerShown: false }} 
         />
 
-        {/* ── Legacy Login (keep if still needed, or remove) ── */}
-        <Stack.Screen
-          name="Login"
-          component={LoginScreen}
+        <Stack.Screen 
+          name="GetStarted" 
+          component={GetStartedScreen} 
           options={{ headerShown: false }}
         />
+        <Stack.Screen 
+          name="AboutWork"  
+          component={AboutWorkScreen}  
+          options={{ headerShown: false }} 
+        />
+        <Stack.Screen 
+          name="Login" 
+          component={LoginScreen} 
+          options={{ headerShown: false }} 
+        />
 
-        {/* ── Main App Screens ── */}
         <Stack.Screen
           name="Home"
           component={HomeScreen}
@@ -112,11 +114,28 @@ const AppNavigator = () => {
           component={JobHistoryScreen}    
           options={{ headerShown: false }} 
          />
-         <Stack.Screen
+
+        <Stack.Screen
+          name="EmployerHome"
+          component={EmployerHomeScreen}
+          options={{ headerShown: false }}   
+        />
+        <Stack.Screen
+          name="FindWorkers"
+          component={FindWorkersScreen}
+          options={{ headerShown: false }} 
+        />
+        <Stack.Screen
+          name="PostJob"
+          component={PostJobScreen}
+          options={{ headerShown: false }} 
+        />
+
+        <Stack.Screen
           name="Review"    
           component={ReviewScreen}    
           options={{ headerShown: false }} 
-         />
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -14,66 +14,30 @@ import WebView from 'react-native-webview';
 import Geolocation from 'react-native-geolocation-service';
 import styles from '../styles/commonStyles';
 import Header from '../components/Header';
+import T from '../components/T';
+import useTranslatedText from '../hooks/useTranslatedText';
 
 // ── Job avatar meta ───────────────────────────────────────────────
 const JOB_META = {
-  Mason: { letter: 'M', color: '#4A90E2', bg: '#EAF2FB' },
-  Electrician: { letter: 'E', color: '#E65100', bg: '#FFF3E0' },
-  Painter: { letter: 'P', color: '#6A1B9A', bg: '#F3E5F5' },
-  Plumber: { letter: 'Pl', color: '#00695C', bg: '#E0F2F1' },
-  Carpenter: { letter: 'Ca', color: '#558B2F', bg: '#F1F8E9' },
+  Mason:       { letter: 'M',  color: '#4A90E2', bg: '#EAF2FB' },
+  Electrician: { letter: 'E',  color: '#E65100', bg: '#FFF3E0' },
+  Painter:     { letter: 'P',  color: '#6A1B9A', bg: '#F3E5F5' },
+  Plumber:     { letter: 'Pl', color: '#00695C', bg: '#E0F2F1' },
+  Carpenter:   { letter: 'Ca', color: '#558B2F', bg: '#F1F8E9' },
 };
 
-// ── Pure helpers outside component (no hook violation) ───────────
+// ── Pure helpers outside component ───────────────────────────────
 const getJobsNearLocation = (lat, lng) => [
-  {
-    id: 1,
-    title: 'Mason',
-    pay: '600',
-    unit: '/day',
-    lat: lat + 0.008,
-    lng: lng + 0.005,
-  },
-  {
-    id: 2,
-    title: 'Electrician',
-    pay: '700',
-    unit: '',
-    lat: lat - 0.01,
-    lng: lng - 0.008,
-  },
-  {
-    id: 3,
-    title: 'Painter',
-    pay: '500',
-    unit: '/day',
-    lat: lat + 0.015,
-    lng: lng + 0.012,
-  },
-  {
-    id: 4,
-    title: 'Plumber',
-    pay: '650',
-    unit: '/day',
-    lat: lat - 0.006,
-    lng: lng + 0.014,
-  },
-  {
-    id: 5,
-    title: 'Carpenter',
-    pay: '580',
-    unit: '/day',
-    lat: lat + 0.02,
-    lng: lng - 0.01,
-  },
+  { id: 1, title: 'Mason',       pay: '600', unit: '/day', lat: lat + 0.008, lng: lng + 0.005 },
+  { id: 2, title: 'Electrician', pay: '700', unit: '',     lat: lat - 0.01,  lng: lng - 0.008 },
+  { id: 3, title: 'Painter',     pay: '500', unit: '/day', lat: lat + 0.015, lng: lng + 0.012 },
+  { id: 4, title: 'Plumber',     pay: '650', unit: '/day', lat: lat - 0.006, lng: lng + 0.014 },
+  { id: 5, title: 'Carpenter',   pay: '580', unit: '/day', lat: lat + 0.02,  lng: lng - 0.01  },
 ];
 
 const getMapHTML = (lat, lng, jobs) => {
   const markers = jobs
-    .map(
-      j =>
-        `{lat:${j.lat},lng:${j.lng},title:"${j.title}",pay:"\u20B9${j.pay}${j.unit}"}`,
-    )
+    .map(j => `{lat:${j.lat},lng:${j.lng},title:"${j.title}",pay:"\u20B9${j.pay}${j.unit}"}`)
     .join(',');
   return `<!DOCTYPE html><html>
   <head>
@@ -85,14 +49,13 @@ const getMapHTML = (lat, lng, jobs) => {
       html,body{height:100%;overflow:hidden;touch-action:none}
       #map{height:100vh;width:100vw}
       .leaflet-control-attribution{font-size:8px!important;opacity:.3!important;background:transparent!important;box-shadow:none!important}
-      /* Blue teardrop pin — matches #EA4335 */
       .pin-wrap{width:26px;height:36px;position:relative}
-      .pin-body{width:26px;height:26px;background:#E53935;border-radius:50% 50% 50% 0;transform:rotate(-45deg);position:absolute;top:0;left:0;box-shadow:0 2px 8px rgba(229,57,53,.45);border:2.5px solid #fff}      .pin-inner{width:10px;height:10px;background:#fff;border-radius:50%;position:absolute;top:6px;left:6px}
-      .pin-tail{width:4px;height:10px;background:#E53935;position:absolute;bottom:0;left:11px;border-radius:0 0 3px 3px}      /* User dot */
+      .pin-body{width:26px;height:26px;background:#E53935;border-radius:50% 50% 50% 0;transform:rotate(-45deg);position:absolute;top:0;left:0;box-shadow:0 2px 8px rgba(229,57,53,.45);border:2.5px solid #fff}
+      .pin-inner{width:10px;height:10px;background:#fff;border-radius:50%;position:absolute;top:6px;left:6px}
+      .pin-tail{width:4px;height:10px;background:#E53935;position:absolute;bottom:0;left:11px;border-radius:0 0 3px 3px}
       .user-ring{width:22px;height:22px;border-radius:50%;background:rgba(74,144,226,.2);display:flex;align-items:center;justify-content:center;animation:pulse 2s infinite}
       .user-core{width:12px;height:12px;border-radius:50%;background:#4A90E2;border:2.5px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.25)}
       @keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.7);opacity:.35}}
-      /* Popup */
       .leaflet-popup-content-wrapper{border-radius:12px!important;padding:0!important;box-shadow:0 4px 20px rgba(0,0,0,.12)!important;overflow:hidden}
       .leaflet-popup-content{margin:0!important}
       .leaflet-popup-close-button{display:none!important}
@@ -117,12 +80,99 @@ const getMapHTML = (lat, lng, jobs) => {
   </script></body></html>`;
 };
 
-// ─────────────────────────────────────────────────────────────────
+// ── Job card component with translation ──────────────────────────
+const JobCard = ({ job, onPress }) => {
+  const meta = JOB_META[job.title] || { letter: job.title[0], color: '#4A90E2', bg: '#EAF2FB' };
+  const [title, fullDay, viewDetails, newLabel] = useTranslatedText(
+    job.title, 'Full Day', 'View Details', 'New',
+  );
+
+  return (
+    <View key={job.id} style={styles.ongoingJobCard}>
+      <View style={[styles.ongoingJobAccent, { backgroundColor: '#4A90E2' }]} />
+      <View style={[styles.ongoingJobBody, { paddingVertical: 12 }]}>
+
+        <View style={styles.jobCardHeader}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
+            <View style={{
+              width: 42,
+              height: 42,
+              borderRadius: 10,
+              backgroundColor: meta.bg,
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginRight: 12,
+            }}>
+              <Text style={{ fontSize: 15, fontWeight: '800', color: meta.color }}>
+                {meta.letter}
+              </Text>
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.jobTitle}>{title}</Text>
+              <Text style={styles.jobPayment}>
+                {'\u20B9'}{job.pay}{job.unit}
+              </Text>
+              <Text style={styles.jobLocation}>📍 Near your location</Text>
+            </View>
+          </View>
+          <View style={styles.jobBadge}>
+            <Text style={styles.jobBadgeText}>{newLabel}</Text>
+          </View>
+        </View>
+
+        {/* Divider */}
+        <View style={{ height: 1, backgroundColor: '#F0F0F0', marginVertical: 10 }} />
+
+        {/* Footer */}
+        <View style={styles.jobCardFooter}>
+          <View style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            backgroundColor: '#F5F7FA',
+            paddingHorizontal: 10,
+            paddingVertical: 5,
+            borderRadius: 8,
+          }}>
+            <View style={{ width: 7, height: 7, borderRadius: 4, backgroundColor: '#4A90E2', marginRight: 5 }} />
+            <Text style={styles.jobTiming}>{fullDay}</Text>
+          </View>
+          <TouchableOpacity
+            style={[styles.acceptButtonSmall, {
+              backgroundColor: '#5CB85C',
+              paddingHorizontal: 22,
+              borderRadius: 10,
+              shadowColor: '#5CB85C',
+              shadowOffset: { width: 0, height: 3 },
+              shadowOpacity: 0.35,
+              shadowRadius: 5,
+              elevation: 4,
+            }]}
+            onPress={onPress}
+          >
+            <Text style={styles.acceptButtonText}>{viewDetails}</Text>
+          </TouchableOpacity>
+        </View>
+
+      </View>
+    </View>
+  );
+};
+
+// ── Main screen ───────────────────────────────────────────────────
 const HereJobScreen = ({ navigation }) => {
-  const [location, setLocation] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [location,   setLocation]   = useState(null);
+  const [loading,    setLoading]    = useState(true);
   const [nearbyJobs, setNearbyJobs] = useState([]);
-  const [gpsLabel, setGpsLabel] = useState('');
+  const [gpsLabel,   setGpsLabel]   = useState('');
+
+  // ── Translate static screen strings ──
+  const [
+    nearbyJobsOnMap, gettingLocation,
+    recommendedJobs, nearby,
+  ] = useTranslatedText(
+    'Nearby Jobs on Map', 'Getting your location...',
+    'Recommended Jobs', 'Nearby',
+  );
 
   useEffect(() => {
     requestAndFetchLocation();
@@ -180,6 +230,8 @@ const HereJobScreen = ({ navigation }) => {
     }
   };
 
+  const isLive = gpsLabel.startsWith('Live');
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
@@ -188,90 +240,52 @@ const HereJobScreen = ({ navigation }) => {
         nestedScrollEnabled={true}
         showsVerticalScrollIndicator={false}
       >
-        {/* ── Page Title ───────────────────────────────────────── */}
+        {/* ── Header ── */}
         <Header title="Jobs Near You" navigation={navigation} />
 
-        {/* ── GPS status — reuses jobLocation style ────────────── */}
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginBottom: 4,
-          }}
-        >
-          <View
-            style={{
-              width: 7,
-              height: 7,
-              borderRadius: 4,
-              backgroundColor: '#4A90E2',
-              marginRight: 6,
-            }}
-          />
-          <Text style={styles.jobLocation}>Nearby Jobs on Map</Text>
+        {/* ── GPS status ── */}
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 4 }}>
+          <View style={{ width: 7, height: 7, borderRadius: 4, backgroundColor: '#4A90E2', marginRight: 6 }} />
+          <Text style={styles.jobLocation}>{nearbyJobsOnMap}</Text>
         </View>
 
         {gpsLabel ? (
-          <View
-            style={{
-              alignSelf: 'flex-start',
-              backgroundColor: gpsLabel.startsWith('Live')
-                ? '#EAF2FB'
-                : '#FFE5E5',
-              paddingHorizontal: 10,
-              paddingVertical: 4,
-              borderRadius: 20,
-              marginBottom: 12,
-            }}
-          >
-            <Text
-              style={{
-                fontSize: 11,
-                fontWeight: '600',
-                color: gpsLabel.startsWith('Live') ? '#4A90E2' : '#FF6B6B',
-              }}
-            >
-              {gpsLabel.startsWith('Live') ? '● ' : '○ '}
-              {gpsLabel}
+          <View style={{
+            alignSelf: 'flex-start',
+            backgroundColor: isLive ? '#EAF2FB' : '#FFE5E5',
+            paddingHorizontal: 10,
+            paddingVertical: 4,
+            borderRadius: 20,
+            marginBottom: 12,
+          }}>
+            <Text style={{ fontSize: 11, fontWeight: '600', color: isLive ? '#4A90E2' : '#FF6B6B' }}>
+              {isLive ? '● ' : '○ '}{gpsLabel}
             </Text>
           </View>
         ) : (
           <View style={{ marginBottom: 12 }} />
         )}
 
-        {/* ── Map ─────────────────────────────────────────────── */}
-        <View
-          style={{
-            height: 300,
-            borderRadius: 12,
-            overflow: 'hidden',
-            marginBottom: 20,
-            shadowColor: '#000',
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.1,
-            shadowRadius: 4,
-            elevation: 3,
-          }}
-        >
+        {/* ── Map ── */}
+        <View style={{
+          height: 300,
+          borderRadius: 12,
+          overflow: 'hidden',
+          marginBottom: 20,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.1,
+          shadowRadius: 4,
+          elevation: 3,
+        }}>
           {loading ? (
-            <View
-              style={{
-                flex: 1,
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: '#EAF2FB',
-              }}
-            >
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#EAF2FB' }}>
               <ActivityIndicator size="large" color="#4A90E2" />
-              <Text style={[styles.subGreeting, { marginTop: 10 }]}>
-                Getting your location...
-              </Text>
+              <Text style={[styles.subGreeting, { marginTop: 10 }]}>{gettingLocation}</Text>
             </View>
           ) : (
             <WebView
-              source={{
-                html: getMapHTML(location.lat, location.lng, nearbyJobs),
-              }}
+              source={{ html: getMapHTML(location.lat, location.lng, nearbyJobs) }}
               style={{ flex: 1 }}
               javaScriptEnabled={true}
               domStorageEnabled={true}
@@ -286,151 +300,30 @@ const HereJobScreen = ({ navigation }) => {
           )}
         </View>
 
-        {/* ── Section Header ───────────────────────────────────── */}
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginBottom: 15,
-          }}
-        >
-          <Text style={styles.sectionTitle}>Recommended Jobs</Text>
-          <View
-            style={{
-              backgroundColor: '#EAF2FB',
-              paddingHorizontal: 10,
-              paddingVertical: 4,
-              borderRadius: 20,
-            }}
-          >
+        {/* ── Section header ── */}
+        <View style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginBottom: 15,
+        }}>
+          <Text style={styles.sectionTitle}>{recommendedJobs}</Text>
+          <View style={{ backgroundColor: '#EAF2FB', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 20 }}>
             <Text style={{ fontSize: 12, fontWeight: '700', color: '#4A90E2' }}>
-              {nearbyJobs.length} Nearby
+              {nearbyJobs.length} {nearby}
             </Text>
           </View>
         </View>
 
-        {/* ── Job Cards ────────────────────────────────────────── */}
-        {nearbyJobs.map(job => {
-          const meta = JOB_META[job.title] || {
-            letter: job.title[0],
-            color: '#4A90E2',
-            bg: '#EAF2FB',
-          };
-          return (
-            <View 
-              key={job.id} 
-              style={styles.ongoingJobCard}
-            >
-              <View style={[styles.ongoingJobAccent, { backgroundColor: '#4A90E2'}]} />
-              <View style={[styles.ongoingJobBody, { paddingVertical: 12 }]}>
+        {/* ── Job cards ── */}
+        {nearbyJobs.map(job => (
+          <JobCard
+            key={job.id}
+            job={job}
+            onPress={() => navigation.navigate('JobDetailFull')}
+          />
+        ))}
 
-              <View style={styles.jobCardHeader}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    flex: 1,
-                  }}
-                >
-                  {/* Letter avatar */}
-                  <View
-                    style={{
-                      width: 42,
-                      height: 42,
-                      borderRadius: 10,
-                      backgroundColor: meta.bg,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      marginRight: 12,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontSize: 15,
-                        fontWeight: '800',
-                        color: meta.color,
-                      }}
-                    >
-                      {meta.letter}
-                    </Text>
-                  </View>
-
-                  <View style={{ flex: 1 }}>
-                    <Text style={styles.jobTitle}>{job.title}</Text>
-                    <Text style={styles.jobPayment}>
-                      {'\u20B9'}
-                      {job.pay}
-                      {job.unit}
-                    </Text>
-                    <Text style={styles.jobLocation}>📍 Near your location</Text>
-                  </View>
-                </View>
-
-                {/* New badge — reuses jobBadge from commonStyles */}
-                <View style={styles.jobBadge}>
-                  <Text style={styles.jobBadgeText}>New</Text>
-                </View>
-              </View>
-
-              {/* Divider */}
-              <View
-                style={{
-                  height: 1,
-                  backgroundColor: '#F0F0F0',
-                  marginVertical: 10,
-                }}
-              />
-
-              {/* Footer row */}
-              <View style={styles.jobCardFooter}>
-                {/* Full Day pill */}
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    backgroundColor: '#F5F7FA',
-                    paddingHorizontal: 10,
-                    paddingVertical: 5,
-                    borderRadius: 8,
-                  }}
-                >
-                  <View
-                    style={{
-                      width: 7,
-                      height: 7,
-                      borderRadius: 4,
-                      backgroundColor: '#4A90E2',
-                      marginRight: 5,
-                    }}
-                  />
-                  <Text style={styles.jobTiming}>Full Day</Text>
-                </View>
-
-                {/* Accept button — reuses acceptButtonSmall */}
-                <TouchableOpacity
-                  style={[
-                    styles.acceptButtonSmall,
-                    {
-                      backgroundColor: '#5CB85C',
-                      paddingHorizontal: 22,
-                      borderRadius: 10,
-                      shadowColor: '#5CB85C',
-                      shadowOffset: { width: 0, height: 3 },
-                      shadowOpacity: 0.35,
-                      shadowRadius: 5,
-                      elevation: 4,
-                    },
-                  ]}
-                  onPress={() => navigation.navigate('JobDetailFull')}
-                >
-                  <Text style={styles.acceptButtonText}>View Details</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-          );
-        })}
       </ScrollView>
     </SafeAreaView>
   );

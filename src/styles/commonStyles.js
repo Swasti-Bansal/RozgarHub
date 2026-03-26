@@ -1,4 +1,4 @@
-// src/styles/commonStyles.js - Complete StyleSheet
+// src/styles/commonStyles.js
 import { StyleSheet, Dimensions } from 'react-native';
 
 const { width } = Dimensions.get('window');
@@ -20,12 +20,11 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
 
+
   welcomeRoot: {
     flex: 1,
     backgroundColor: '#2C3E50',
   },
-
-  // ── Hero ──
   welcomeHero: {
     backgroundColor: '#2C3E50',
     paddingHorizontal: 24,
@@ -34,8 +33,6 @@ const styles = StyleSheet.create({
     minHeight: 340,
     overflow: 'hidden',
   },
-
-  // decorative background circles
   welcomeDecorCircle1: {
     position: 'absolute',
     width: 200,
@@ -66,7 +63,6 @@ const styles = StyleSheet.create({
     left: -20,
     bottom: 20,
   },
-
   welcomeLangBtn: {
     alignSelf: 'flex-end',
     backgroundColor: 'rgba(255,255,255,0.12)',
@@ -82,8 +78,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
   },
-
-  // Logo
   welcomeLogoRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -104,8 +98,6 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     letterSpacing: 0.5,
   },
-
-  // Tagline
   welcomeTagline: {
     fontSize: 30,
     fontWeight: 'bold',
@@ -118,8 +110,6 @@ const styles = StyleSheet.create({
     color: 'rgba(255,255,255,0.65)',
     marginBottom: 28,
   },
-
-  // Trust badges
   welcomeBadgeRow: {
     flexDirection: 'row',
   },
@@ -135,8 +125,6 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '600',
   },
-
-  // ── Bottom panel ──
   welcomeBottom: {
     flex: 1,
     backgroundColor: '#F5F7FA',
@@ -157,8 +145,6 @@ const styles = StyleSheet.create({
     color: '#7F8C8D',
     marginBottom: 24,
   },
-
-  // Phone input
   welcomePhoneRow: {
     flexDirection: 'row',
     marginBottom: 14,
@@ -187,9 +173,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#E0E0E0',
     color: '#2C3E50',
+    minHeight: 50,
   },
-
-  // Picker
   welcomePickerDropdown: {
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
@@ -211,16 +196,12 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: '#2C3E50',
   },
-
-  // Error
   welcomeErrorText: {
     color: '#E74C3C',
     fontSize: 13,
     marginBottom: 10,
     marginLeft: 2,
   },
-
-  // OTP button
   welcomeOtpBtn: {
     backgroundColor: '#4A90E2',
     borderRadius: 14,
@@ -234,8 +215,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     letterSpacing: 0.3,
   },
-
-  // Why link
   welcomeWhyLink: {
     alignItems: 'center',
   },
@@ -244,6 +223,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
 
+  // ── Shared ──
   locationIcon: {
     fontSize: 60,
     marginVertical: 20,
@@ -491,6 +471,10 @@ const styles = StyleSheet.create({
     padding: 10,
   },
 
+  tabIcon: {
+    fontSize: 24,
+    marginBottom: 5,
+  },
 
   sectionTitle: {
     fontSize: 18,
@@ -504,7 +488,20 @@ const styles = StyleSheet.create({
     color: '#7F8C8D',
     marginBottom: 15,
   },
- 
+
+
+  jobCard: {
+    backgroundColor: '#FFF',
+    borderRadius: 12,
+    padding: 15,
+    marginBottom: 15,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+
   jobCardHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -584,6 +581,13 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     marginBottom: 15,
   },
+
+
+  statusText: {
+    color: '#2C3E50',
+    fontWeight: 'bold',
+  },
+
   mapPlaceholder: {
     backgroundColor: '#E8F4F8',
     height: 150,
@@ -620,6 +624,15 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
 
+
+  tabItem: {
+    flex: 1,
+    padding: 12,
+    alignItems: 'center',
+    backgroundColor: '#FFF',
+    marginHorizontal: 5,
+    borderRadius: 8,
+  },
 
   illustrationContainer: {
     flexDirection: 'row',
@@ -845,7 +858,7 @@ const styles = StyleSheet.create({
   homeStatSubPrimary: { color: '#85B7EB' },
   homeStatSubDark: { color: '#3B6D11' },
  
-  // ── Quick actions ──
+
   homeQaRow: {
     flexDirection: 'row',
     gap: 8,
@@ -871,7 +884,7 @@ const styles = StyleSheet.create({
   homeQaIconText: { fontSize: 24 },
   homeQaLabel: { fontSize: 13, color: '#7F8C8D', fontWeight: '600' },
  
-  // ── Section header ──
+
   homeSectionHead: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -886,7 +899,7 @@ const styles = StyleSheet.create({
   },
   homeCountBadgeText: { fontSize: 13, color: '#185FA5', fontWeight: '600' },
  
-  // ── Ongoing job card ──
+
   ongoingJobCard: {
     backgroundColor: '#fff',
     borderRadius: 14,
@@ -916,7 +929,7 @@ const styles = StyleSheet.create({
   ongoingJobDur: { fontSize: 13, color: '#7F8C8D', marginTop: 3 },
   ongoingJobMeta: { fontSize: 14, color: '#7F8C8D', marginBottom: 3 },
  
-  // ── Status badge ──
+
   jobStatusBadge: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -925,8 +938,15 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
     gap: 5,
   },
-  jobStatusDot: { width: 7, height: 7, borderRadius: 4 },
-  jobStatusBadgeText: { fontSize: 13, fontWeight: '600' },
+  jobStatusDot: { 
+    width: 7, 
+    height: 7, 
+    borderRadius: 4 
+  },
+
+
+  statusDot: { width: 7, height: 7, borderRadius: 4 },
+  statusBadgeText: { fontSize: 13, fontWeight: '600' },
  
   // ── Job card action buttons ──
   ongoingJobActions: {
@@ -951,8 +971,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   jobBtnDoneText: { fontSize: 14, color: '#27500A', fontWeight: '700' },
-  
-   workTypeCheckBadge: {
+
+  workTypeCheckBadge: {
     position: 'absolute',
     top: 6,
     right: 6,
@@ -979,22 +999,12 @@ const styles = StyleSheet.create({
     color: '#2C3E50',
   },
 
-
-
-  // ── Worker Review Screen ──
-  pageHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
   backBtn: {
     fontSize: 28,
     fontWeight: 'bold',
     color: '#2C3E50',
     marginRight: 12,
   },
- 
-  // Overall card
   overallCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
@@ -1025,8 +1035,6 @@ const styles = StyleSheet.create({
   overallRight: {
     flex: 1,
   },
- 
-  // Rating bar
   barRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1056,8 +1064,6 @@ const styles = StyleSheet.create({
     width: 16,
     textAlign: 'right',
   },
- 
-  // Review card
   reviewCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: 14,
@@ -1119,15 +1125,8 @@ const styles = StyleSheet.create({
     color: '#2C3E50',
     lineHeight: 20,
   },
-  
 
 
-
-  // ─────────────────────────────────────────────────────────────────────────────
-// ADD THESE TO YOUR commonStyles.js StyleSheet.create({ ... }) block
-// ─────────────────────────────────────────────────────────────────────────────
-
-  // ── Job progress tracker ──
   rateProgressRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1174,7 +1173,7 @@ const styles = StyleSheet.create({
     marginBottom: 22,
   },
 
-  // ── Star rating ──
+
   rateStarsRow: {
     flexDirection: 'row',
     marginBottom: 8,
@@ -1190,7 +1189,7 @@ const styles = StyleSheet.create({
     color: '#E0E0E0',
   },
 
-  // ── Experience buttons ──
+
   rateExpRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
