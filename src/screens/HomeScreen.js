@@ -1,12 +1,53 @@
-// src/screens/HomeScreen.js
+// src/screens/HomeScreen.js  — PATCH NOTES
+// Replace the two hardcoded constants at the top of HomeScreen.js:
+//
+//   BEFORE (lines ~7-8):
+//     const workerName = 'Rajan Kumar';
+//     const location   = 'Andheri West, Mumbai';
+//
+//   AFTER — add this import at the top of HomeScreen.js:
+//     import { useUser } from '../context/UserContext';
+//
+//   Then inside the HomeScreen component function, replace the constants with:
+//     const { profile } = useUser();
+//     const workerName  = profile.name        || 'Welcome';
+//     const location    = profile.locationLabel || 'Location not set';
+//
+// That's the only change needed — every tx(workerName) and tx(location)
+// reference in the JSX will automatically use the real user name from context.
+//
+// Do the same in SideDrawer.js — replace:
+//     <Text style={s.drawerName}>Rajan Kumar</Text>
+//     <Text style={s.drawerSub}>Painter · 4.8 ⭐</Text>
+//     <Text style={s.drawerSub}>Andheri West, Mumbai</Text>
+// with:
+//     import { useUser } from '../context/UserContext';
+//     const { profile } = useUser();
+//     ...
+//     <Text style={s.drawerName}>{profile.name || 'User'}</Text>
+//     <Text style={s.drawerSub}>{profile.role === 'employer' ? 'Employer' : 'Worker'}</Text>
+//     <Text style={s.drawerSub}>{profile.locationLabel || ''}</Text>
+//
+// And in DashboardScreen.js — replace:
+//     <Text style={s.name}>Rajan Kumar</Text>
+//     <Text style={s.location}>Andheri West, Mumbai</Text>
+// with:
+//     import { useUser } from '../context/UserContext';
+//     const { profile } = useUser();
+//     ...
+//     <Text style={s.name}>{profile.name || 'Welcome'}</Text>
+//     <Text style={s.location}>{profile.locationLabel || 'Location not set'}</Text>
+
+// ─────────────────────────────────────────────────────────────────
+// Full updated HomeScreen.js with the patch applied:
+// ─────────────────────────────────────────────────────────────────
+
 import React, { useState, useEffect } from 'react';
 import SideDrawer from '../components/SideDrawer';
 import { SafeAreaView, ScrollView, View, Text, TouchableOpacity } from 'react-native';
 import styles from '../styles/commonStyles';
 import { useTranslation, _cache } from '../context/TranslationContext';
-
-const workerName = 'Rajan Kumar';
-const location   = 'Andheri West, Mumbai';
+import { useUser } from '../context/UserContext';   // ← NEW
 
 const STATS = [
   { id: '1', value: '12',    label: 'Jobs done',   primary: true  },
@@ -41,7 +82,6 @@ const STATUS_STYLE = {
   scheduled: { bg: '#E8F4FF', text: '#185FA5', dot: '#4A90E2', accent: '#4A90E2' },
 };
 
-// ── Translation helper ────────────────────────────────────────────
 const translateString = async (text, lang) => {
   if (lang === 'en' || !text) return text;
   const key = `${text}__${lang}`;
@@ -61,14 +101,12 @@ const translateString = async (text, lang) => {
   return text;
 };
 
-// ── All static strings to translate ──────────────────────────────
 const STATIC_STRINGS = [
   'Namaste,',
   'Jobs done', 'Your rating', 'Earned',
   'Find Work', 'History', 'Reviews',
   'Ongoing Jobs', 'active',
   'View Details', 'Update Status',
-  // job data
   'Painter', 'Vasarae, Mumbai', 'C3 Construction', 'Workshop',
   'Started 2 hours ago', 'Ongoing',
   'Chembur, Mumbai', 'Residential',
@@ -78,7 +116,12 @@ const STATIC_STRINGS = [
 const HomeScreen = ({ navigation }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { currentLang }             = useTranslation();
-  const [t, setT]                   = useState({}); // translated strings map
+  const { profile }                 = useUser();                // ← NEW
+  const [t, setT]                   = useState({});
+
+  // Use real profile data, fall back gracefully if onboarding was skipped
+  const workerName = profile.name         || 'Welcome';          // ← NEW
+  const location   = profile.locationLabel || 'Location not set'; // ← NEW
 
   useEffect(() => {
     let cancelled = false;
@@ -95,13 +138,10 @@ const HomeScreen = ({ navigation }) => {
     return () => { cancelled = true; };
   }, [currentLang]);
 
-  // Helper — falls back to original if not yet translated
   const tx = (s) => t[s] || s;
 
   return (
     <SafeAreaView style={styles.container}>
-
-      {/* ── Top Bar ── */}
       <View style={styles.homeTopBar}>
         <View style={styles.homeTopBarLeft}>
           <View style={styles.homeAvatar}>
@@ -122,7 +162,6 @@ const HomeScreen = ({ navigation }) => {
 
       <ScrollView style={styles.screenContainer} showsVerticalScrollIndicator={false}>
 
-        {/* ── Stats ── */}
         <View style={styles.homeStatsRow}>
           {STATS.map(item => (
             <View key={item.id} style={[styles.homeStatCard, item.primary && styles.homeStatCardPrimary]}>
@@ -136,7 +175,6 @@ const HomeScreen = ({ navigation }) => {
           ))}
         </View>
 
-        {/* ── Quick Actions ── */}
         <View style={styles.homeQaRow}>
           {QUICK_ACTIONS.map(item => (
             <TouchableOpacity
@@ -153,7 +191,6 @@ const HomeScreen = ({ navigation }) => {
           ))}
         </View>
 
-        {/* ── Section Header ── */}
         <View style={styles.homeSectionHead}>
           <Text style={styles.sectionTitle}>{tx('Ongoing Jobs')}</Text>
           <View style={styles.homeCountBadge}>
@@ -163,14 +200,12 @@ const HomeScreen = ({ navigation }) => {
           </View>
         </View>
 
-        {/* ── Job Cards ── */}
         {ONGOING_JOBS.map(job => {
           const st = STATUS_STYLE[job.status] || STATUS_STYLE.scheduled;
           return (
             <View key={job.id} style={styles.ongoingJobCard}>
               <View style={[styles.ongoingJobAccent, { backgroundColor: st.accent }]} />
               <View style={styles.ongoingJobBody}>
-
                 <View style={styles.ongoingJobTop}>
                   <View style={{ flex: 1 }}>
                     <View style={styles.ongoingJobTitleRow}>
@@ -189,13 +224,11 @@ const HomeScreen = ({ navigation }) => {
                     <Text style={styles.ongoingJobDur}>{job.duration}</Text>
                   </View>
                 </View>
-
                 {job.client
                   ? <Text style={styles.ongoingJobMeta}>👤 {tx(job.client)}  ·  🏢 {tx(job.type)}</Text>
                   : <Text style={styles.ongoingJobMeta}>🏢 {tx(job.type)}</Text>
                 }
                 <Text style={styles.ongoingJobMeta}>⏱️ {tx(job.meta)}</Text>
-
                 <View style={styles.ongoingJobActions}>
                   <TouchableOpacity
                     style={styles.jobBtnGhost}
@@ -210,7 +243,6 @@ const HomeScreen = ({ navigation }) => {
                     <Text style={styles.jobBtnDoneText}>{tx('Update Status')}</Text>
                   </TouchableOpacity>
                 </View>
-
               </View>
             </View>
           );
@@ -218,6 +250,7 @@ const HomeScreen = ({ navigation }) => {
 
         <View style={{ height: 24 }} />
       </ScrollView>
+
       <SideDrawer
         visible={drawerOpen}
         onClose={() => setDrawerOpen(false)}

@@ -1,22 +1,17 @@
 // src/screens/OTPVerifyScreen.js
+// After successful OTP verification, creates/merges user doc in Firestore
+
 import React, { useState, useRef, useEffect } from 'react';
 import {
-  SafeAreaView,
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  Alert,
+  SafeAreaView, View, Text, TextInput, TouchableOpacity,
+  ActivityIndicator, KeyboardAvoidingView, Platform, StyleSheet, Alert,
 } from 'react-native';
 import styles from '../styles/commonStyles';
 import { verifyOTP, sendOTP } from '../services/authService';
+import { createUserProfile } from '../services/dbService';
 import T from '../components/T';
 
-const OTP_LENGTH = 6;
+const OTP_LENGTH      = 6;
 const RESEND_COUNTDOWN = 30;
 
 const OTPVerifyScreen = ({ navigation, route }) => {
@@ -33,7 +28,7 @@ const OTPVerifyScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     if (countdown === 0) { setCanResend(true); return; }
-    const timer = setTimeout(() => setCountdown((c) => c - 1), 1000);
+    const timer = setTimeout(() => setCountdown(c => c - 1), 1000);
     return () => clearTimeout(timer);
   }, [countdown]);
 
@@ -48,34 +43,39 @@ const OTPVerifyScreen = ({ navigation, route }) => {
     }
     newOtp[index] = text.replace(/\D/g, '').slice(-1);
     setOtp(newOtp);
-    if (text && index < OTP_LENGTH - 1) {
-      inputRefs.current[index + 1]?.focus();
-    }
+    if (text && index < OTP_LENGTH - 1) inputRefs.current[index + 1]?.focus();
   };
 
   const handleKeyPress = (e, index) => {
-    if (e.nativeEvent.key === 'Backspace' && !otp[index] && index > 0) {
+    if (e.nativeEvent.key === 'Backspace' && !otp[index] && index > 0)
       inputRefs.current[index - 1]?.focus();
-    }
   };
 
   const handleVerify = async () => {
     const code = otp.join('');
-    if (code.length < OTP_LENGTH) {
-      setError('Please enter all 6 digits.');
-      return;
-    }
+    if (code.length < OTP_LENGTH) { setError('Please enter all 6 digits.'); return; }
+
     setLoading(true);
     setError('');
-    const { success, error: errMsg } = await verifyOTP(confirmation, code);
-    setLoading(false);
-    if (success) {
-      navigation.reset({ index: 0, routes: [{ name: 'GetStarted' }] });
-    } else {
+
+    // Step 1 — verify OTP with Firebase Auth
+    const { success, user, error: errMsg } = await verifyOTP(confirmation, code);
+
+    if (!success) {
+      setLoading(false);
       setError(errMsg);
       setOtp(Array(OTP_LENGTH).fill(''));
       inputRefs.current[0]?.focus();
+      return;
     }
+
+    // Step 2 — create/merge user document in Firestore
+    await createUserProfile({ phoneNumber });
+
+    setLoading(false);
+
+    // Reset navigation stack so user can't go back to auth screens
+    navigation.reset({ index: 0, routes: [{ name: 'GetStarted' }] });
   };
 
   const handleResend = async () => {
@@ -84,6 +84,7 @@ const OTPVerifyScreen = ({ navigation, route }) => {
     setCountdown(RESEND_COUNTDOWN);
     setOtp(Array(OTP_LENGTH).fill(''));
     setError('');
+
     const { success, confirmation: newConf, error: errMsg } = await sendOTP(phoneNumber);
     if (success) {
       setConfirmation(newConf);
@@ -106,38 +107,23 @@ const OTPVerifyScreen = ({ navigation, route }) => {
       >
         <View style={styles.screenContainer}>
 
-          {/* ── Back ── */}
-          <TouchableOpacity
-            style={otpStyles.backButton}
-            onPress={() => navigation.goBack()}
-          >
-            <T style={otpStyles.backText}>← Back</T>
+          <TouchableOpacity style={s.backButton} onPress={() => navigation.goBack()}>
+            <T style={s.backText}>← Back</T>
           </TouchableOpacity>
 
-          {/* ── Title ── */}
           <T style={styles.screenTitle}>Verify OTP</T>
-          <T style={styles.screenSubtitle}>
-            Enter the 6-digit code sent to
-          </T>
-          {/* Phone number shown separately — not translated */}
-          <Text style={[styles.screenSubtitle, otpStyles.phoneHighlight]}>
-            {maskedPhone}
-          </Text>
+          <T style={styles.screenSubtitle}>Enter the 6-digit code sent to</T>
+          <Text style={[styles.screenSubtitle, s.phoneHighlight]}>{maskedPhone}</Text>
 
-          {/* ── OTP Boxes — no translation needed ── */}
-          <View style={otpStyles.otpRow}>
+          <View style={s.otpRow}>
             {otp.map((digit, i) => (
               <TextInput
                 key={i}
-                ref={(ref) => (inputRefs.current[i] = ref)}
-                style={[
-                  otpStyles.otpBox,
-                  digit ? otpStyles.otpBoxFilled : null,
-                  error ? otpStyles.otpBoxError : null,
-                ]}
+                ref={ref => (inputRefs.current[i] = ref)}
+                style={[s.otpBox, digit && s.otpBoxFilled, error && s.otpBoxError]}
                 value={digit}
-                onChangeText={(t) => handleOtpChange(t, i)}
-                onKeyPress={(e) => handleKeyPress(e, i)}
+                onChangeText={t => handleOtpChange(t, i)}
+                onKeyPress={e => handleKeyPress(e, i)}
                 keyboardType="number-pad"
                 maxLength={OTP_LENGTH}
                 selectTextOnFocus
@@ -146,10 +132,8 @@ const OTPVerifyScreen = ({ navigation, route }) => {
             ))}
           </View>
 
-          {/* ── Error — not translated (dynamic server message) ── */}
-          {!!error && <Text style={otpStyles.errorText}>{error}</Text>}
+          {!!error && <Text style={s.errorText}>{error}</Text>}
 
-          {/* ── Verify Button ── */}
           <TouchableOpacity
             style={[styles.primaryButton, loading && { opacity: 0.7 }]}
             onPress={handleVerify}
@@ -161,17 +145,15 @@ const OTPVerifyScreen = ({ navigation, route }) => {
             }
           </TouchableOpacity>
 
-          {/* ── Resend ── */}
-          <View style={otpStyles.resendRow}>
+          <View style={s.resendRow}>
             {canResend ? (
               <TouchableOpacity onPress={handleResend}>
-                <T style={otpStyles.resendLink}>Resend OTP</T>
+                <T style={s.resendLink}>Resend OTP</T>
               </TouchableOpacity>
             ) : (
-              <Text style={otpStyles.countdownText}>
-                {/* Countdown — mixed text, use plain Text */}
-                Resend OTP in {' '}
-                <Text style={otpStyles.countdownNumber}>
+              <Text style={s.countdownText}>
+                Resend OTP in{' '}
+                <Text style={s.countdownNumber}>
                   {String(Math.floor(countdown / 60)).padStart(2, '0')}:
                   {String(countdown % 60).padStart(2, '0')}
                 </Text>
@@ -179,11 +161,7 @@ const OTPVerifyScreen = ({ navigation, route }) => {
             )}
           </View>
 
-          {/* ── Change number ── */}
-          <TouchableOpacity
-            style={otpStyles.changeNumber}
-            onPress={() => navigation.goBack()}
-          >
+          <TouchableOpacity style={s.changeNumber} onPress={() => navigation.goBack()}>
             <T style={styles.linkText}>Change mobile number</T>
           </TouchableOpacity>
 
@@ -193,29 +171,25 @@ const OTPVerifyScreen = ({ navigation, route }) => {
   );
 };
 
-const otpStyles = StyleSheet.create({
-  backButton:    { marginBottom: 20 },
-  backText:      { fontSize: 16, color: '#4A90E2', fontWeight: '600' },
-  phoneHighlight:{ fontWeight: 'bold', color: '#2C3E50', marginBottom: 30 },
-  otpRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginVertical: 30,
-  },
+const s = StyleSheet.create({
+  backButton:      { marginBottom: 20 },
+  backText:        { fontSize: 16, color: '#4A90E2', fontWeight: '600' },
+  phoneHighlight:  { fontWeight: 'bold', color: '#2C3E50', marginBottom: 30 },
+  otpRow:          { flexDirection: 'row', justifyContent: 'space-between', marginVertical: 30 },
   otpBox: {
     width: 48, height: 56, borderRadius: 12,
     backgroundColor: '#FFF', borderWidth: 1.5,
     borderColor: '#E0E0E0', fontSize: 22,
     fontWeight: 'bold', color: '#2C3E50', textAlign: 'center',
   },
-  otpBoxFilled:  { borderColor: '#4A90E2', backgroundColor: '#EEF4FF' },
-  otpBoxError:   { borderColor: '#E74C3C', backgroundColor: '#FFF5F5' },
-  errorText:     { color: '#E74C3C', fontSize: 14, textAlign: 'center', marginBottom: 16 },
-  resendRow:     { alignItems: 'center', marginTop: 16 },
-  resendLink:    { color: '#4A90E2', fontSize: 15, fontWeight: '600' },
-  countdownText: { color: '#7F8C8D', fontSize: 14 },
+  otpBoxFilled:    { borderColor: '#4A90E2', backgroundColor: '#EEF4FF' },
+  otpBoxError:     { borderColor: '#E74C3C', backgroundColor: '#FFF5F5' },
+  errorText:       { color: '#E74C3C', fontSize: 14, textAlign: 'center', marginBottom: 16 },
+  resendRow:       { alignItems: 'center', marginTop: 16 },
+  resendLink:      { color: '#4A90E2', fontSize: 15, fontWeight: '600' },
+  countdownText:   { color: '#7F8C8D', fontSize: 14 },
   countdownNumber: { fontWeight: 'bold', color: '#2C3E50' },
-  changeNumber:  { alignItems: 'center', marginTop: 20 },
+  changeNumber:    { alignItems: 'center', marginTop: 20 },
 });
 
 export default OTPVerifyScreen;
