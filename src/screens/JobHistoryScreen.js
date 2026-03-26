@@ -11,6 +11,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import styles from '../styles/commonStyles';
+import Header from '../components/Header';
 
 const FILTER_TABS = ['All', 'Completed', 'Cancelled'];
 
@@ -96,13 +97,7 @@ const JobHistoryScreen = ({ navigation }) => {
       <ScrollView style={styles.screenContainer} showsVerticalScrollIndicator={false}>
 
         {/* ── Page Header ── */}
-        <View style={localStyles.pageHeader}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Text style={localStyles.backText}>← Back</Text>
-          </TouchableOpacity>
-          <Text style={styles.screenTitle}>Job History</Text>
-          <Text style={styles.screenSubtitle}>Your previous work</Text>
-        </View>
+        <Header title="Job History" navigation={navigation} />
 
         {/* ── Summary Cards ── */}
         <View style={localStyles.summaryRow}>

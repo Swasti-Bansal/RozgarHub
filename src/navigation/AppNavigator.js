@@ -15,10 +15,9 @@ import LoginScreen      from '../screens/LoginScreen';
 import HomeScreen       from '../screens/HomeScreen';
 import HereJobScreen    from '../screens/HereJobScreen';
 import RateJobScreen    from '../screens/RateJobScreen';
-import ActiveJobsScreen from '../screens/ActiveJobsScreen';
-import JobDetailScreen  from '../screens/JobDetailScreen';
 import JobDetailFullScreen from '../screens/JobDetailFullScreen';
 import JobHistoryScreen    from '../screens/JobHistoryScreen';
+import ReviewScreen    from '../screens/ReviewScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -72,19 +71,19 @@ const AppNavigator = () => {
         <Stack.Screen
           name="GetStarted"
           component={GetStartedScreen}
-          options={{ title: "Let's Get Started" }}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="AboutWork"
           component={AboutWorkScreen}
-          options={{ title: 'About Your Work' }}
+          options={{ headerShown: false }}
         />
 
         {/* ── Legacy Login (keep if still needed, or remove) ── */}
         <Stack.Screen
           name="Login"
           component={LoginScreen}
-          options={{ title: 'Login' }}
+          options={{ headerShown: false }}
         />
 
         {/* ── Main App Screens ── */}
@@ -96,22 +95,12 @@ const AppNavigator = () => {
         <Stack.Screen
           name="HereJob"
           component={HereJobScreen}
-          options={{ title: 'Available Jobs' }}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="RateJob"
           component={RateJobScreen}
-          options={{ title: 'Rate the Job' }}
-        />
-        <Stack.Screen
-          name="ActiveJobs"
-          component={ActiveJobsScreen}
-          options={{ title: 'My Active Jobs' }}
-        />
-        <Stack.Screen
-          name="JobDetail"
-          component={JobDetailScreen}
-          options={{ title: 'Job Details' }}
+          options={{ headerShown: false }}
         />
         <Stack.Screen 
           name="JobDetailFull" 
@@ -119,9 +108,14 @@ const AppNavigator = () => {
           options={{ headerShown: false }}
           />
         <Stack.Screen
-         name="JobHistory"    
-         component={JobHistoryScreen}    
-         options={{ headerShown: false }} 
+          name="JobHistory"    
+          component={JobHistoryScreen}    
+          options={{ headerShown: false }} 
+         />
+         <Stack.Screen
+          name="Review"    
+          component={ReviewScreen}    
+          options={{ headerShown: false }} 
          />
       </Stack.Navigator>
     </NavigationContainer>

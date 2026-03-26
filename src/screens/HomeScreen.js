@@ -70,9 +70,9 @@ const OngoingJobCard = ({ job, onViewDetail, onMarkDone }) => {
           <View style={{ flex: 1 }}>
             <View style={styles.ongoingJobTitleRow}>
               <Text style={styles.ongoingJobTitle}>{job.title}</Text>
-              <View style={[styles.statusBadge, { backgroundColor: st.bg }]}>
-                <View style={[styles.statusDot, { backgroundColor: st.dot }]} />
-                <Text style={[styles.statusBadgeText, { color: st.text }]}>{job.statusLabel}</Text>
+              <View style={[styles.jobStatusBadge, { backgroundColor: st.bg }]}>
+                <View style={[styles.jobStatusDot, { backgroundColor: st.dot }]} />
+                <Text style={[styles.jobStatusBadgeText, { color: st.text }]}>{job.statusLabel}</Text>
               </View>
             </View>
             <Text style={styles.ongoingJobLoc}>📍 {job.location}</Text>
@@ -90,7 +90,9 @@ const OngoingJobCard = ({ job, onViewDetail, onMarkDone }) => {
         <Text style={styles.ongoingJobMeta}>⏱️ {job.meta}</Text>
 
         <View style={styles.ongoingJobActions}>
-          <TouchableOpacity style={styles.jobBtnGhost} onPress={onViewDetail}>
+          <TouchableOpacity 
+            style={styles.jobBtnGhost} 
+            onPress={onViewDetail}>
             <Text style={styles.jobBtnGhostText}>View Details</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.jobBtnDone} onPress={onMarkDone}>
@@ -174,7 +176,7 @@ const HomeScreen = ({ navigation }) => {
           <OngoingJobCard
             key={job.id}
             job={job}
-            onViewDetail={() => navigation.navigate('JobDetail', { jobId: job.id })}
+            onViewDetail={() => navigation.navigate('JobDetailFull', { jobId: job.id })}
             onMarkDone={() => navigation.navigate('RateJob', { jobId: job.id })}
           />
         ))}

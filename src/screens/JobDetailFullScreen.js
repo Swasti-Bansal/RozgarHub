@@ -11,6 +11,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import styles from '../styles/commonStyles';
+import Header from '../components/Header';
 
 // Mock job data — replace with real navigation params or API call
 const JOB = {
@@ -273,11 +274,10 @@ const JobDetailFullScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Header title="Job Detail" navigation={navigation} />
+
       {/* ── Top Bar ── */}
       <View style={localStyles.topBar}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={localStyles.backBtn}>
-          <Text style={localStyles.backText}>← Back</Text>
-        </TouchableOpacity>
         <View style={[
           localStyles.perspectiveBadge,
           perspective === 'employer' && localStyles.perspectiveBadgeEmployer,

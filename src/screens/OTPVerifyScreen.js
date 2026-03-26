@@ -16,6 +16,7 @@ import {
 } from 'react-native';
 import styles from '../styles/commonStyles';
 import { verifyOTP, sendOTP } from '../services/authService';
+import Header from '../components/Header';
 
 const OTP_LENGTH = 6;
 const RESEND_COUNTDOWN = 30; // seconds
@@ -127,15 +128,7 @@ const OTPVerifyScreen = ({ navigation, route }) => {
         style={{ flex: 1 }}
       >
         <View style={styles.screenContainer}>
-          {/* ── Header ── */}
-          <TouchableOpacity
-            style={otpStyles.backButton}
-            onPress={() => navigation.goBack()}
-          >
-            <Text style={otpStyles.backText}>← Back</Text>
-          </TouchableOpacity>
-
-          <Text style={styles.screenTitle}>Verify OTP</Text>
+          <Header title="Verify OTP" navigation={navigation} />
           <Text style={styles.screenSubtitle}>
             Enter the 6-digit code sent to{'\n'}
             <Text style={otpStyles.phoneHighlight}>{maskedPhone}</Text>

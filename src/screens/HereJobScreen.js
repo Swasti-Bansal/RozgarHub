@@ -13,6 +13,7 @@ import {
 import WebView from 'react-native-webview';
 import Geolocation from 'react-native-geolocation-service';
 import styles from '../styles/commonStyles';
+import Header from '../components/Header';
 
 // ── Job avatar meta ───────────────────────────────────────────────
 const JOB_META = {
@@ -188,7 +189,7 @@ const HereJobScreen = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
       >
         {/* ── Page Title ───────────────────────────────────────── */}
-        <Text style={styles.screenTitle}>Here Job</Text>
+        <Header title="Jobs Near You" navigation={navigation} />
 
         {/* ── GPS status — reuses jobLocation style ────────────── */}
         <View
@@ -317,17 +318,13 @@ const HereJobScreen = ({ navigation }) => {
             bg: '#EAF2FB',
           };
           return (
-            <View
-              key={job.id}
-              style={[
-                styles.jobCard,
-                {
-                  borderLeftWidth: 4,
-                  borderLeftColor: '#4A90E2',
-                },
-              ]}
+            <View 
+              key={job.id} 
+              style={styles.ongoingJobCard}
             >
-              {/* Top row: avatar + title + New badge */}
+              <View style={[styles.ongoingJobAccent, { backgroundColor: '#4A90E2'}]} />
+              <View style={[styles.ongoingJobBody, { paddingVertical: 12 }]}>
+
               <View style={styles.jobCardHeader}>
                 <View
                   style={{
@@ -366,6 +363,7 @@ const HereJobScreen = ({ navigation }) => {
                       {job.pay}
                       {job.unit}
                     </Text>
+                    <Text style={styles.jobLocation}>📍 Near your location</Text>
                   </View>
                 </View>
 
@@ -414,22 +412,23 @@ const HereJobScreen = ({ navigation }) => {
                   style={[
                     styles.acceptButtonSmall,
                     {
-                      backgroundColor: '#4A90E2',
+                      backgroundColor: '#5CB85C',
                       paddingHorizontal: 22,
                       borderRadius: 10,
-                      shadowColor: '#4A90E2',
+                      shadowColor: '#5CB85C',
                       shadowOffset: { width: 0, height: 3 },
                       shadowOpacity: 0.35,
                       shadowRadius: 5,
                       elevation: 4,
                     },
                   ]}
-                  onPress={() => navigation.navigate('JobDetail')}
+                  onPress={() => navigation.navigate('JobDetailFull')}
                 >
-                  <Text style={styles.acceptButtonText}>Accept</Text>
+                  <Text style={styles.acceptButtonText}>View Details</Text>
                 </TouchableOpacity>
               </View>
             </View>
+          </View>
           );
         })}
       </ScrollView>

@@ -19,67 +19,234 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 40,
   },
-  logoContainer: {
+
+  welcomeRoot: {
+    flex: 1,
+    backgroundColor: '#2C3E50',
+  },
+
+  // ── Hero ──
+  welcomeHero: {
+    backgroundColor: '#2C3E50',
+    paddingHorizontal: 24,
+    paddingTop: 20,
+    paddingBottom: 52,
+    minHeight: 340,
+    overflow: 'hidden',
+  },
+
+  // decorative background circles
+  welcomeDecorCircle1: {
+    position: 'absolute',
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+    backgroundColor: '#4A90E2',
+    opacity: 0.15,
+    right: -60,
+    top: -40,
+  },
+  welcomeDecorCircle2: {
+    position: 'absolute',
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    backgroundColor: '#5CB85C',
+    opacity: 0.18,
+    right: 40,
+    top: 100,
+  },
+  welcomeDecorCircle3: {
+    position: 'absolute',
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: '#4A90E2',
+    opacity: 0.12,
+    left: -20,
+    bottom: 20,
+  },
+
+  welcomeLangBtn: {
+    alignSelf: 'flex-end',
+    backgroundColor: 'rgba(255,255,255,0.12)',
+    borderRadius: 20,
+    paddingHorizontal: 14,
+    paddingVertical: 6,
+    marginBottom: 32,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.2)',
+  },
+  welcomeLangText: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+
+  // Logo
+  welcomeLogoRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginBottom: 28,
   },
-  logoIcon: {
-    fontSize: 24,
-    marginRight: 8,
-  },
-  logoText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#2C3E50',
-  },
-  languageBtn: {
-    padding: 8,
-  },
-  languageText: {
-    fontSize: 16,
-  },
-  contentCenter: {
-    flex: 1,
+  welcomeLogoIconBox: {
+    width: 52,
+    height: 52,
+    borderRadius: 16,
+    backgroundColor: '#4A90E2',
+    alignItems: 'center',
     justifyContent: 'center',
-    alignItems: 'center',
+    marginRight: 12,
   },
-  mainTitle: {
-    fontSize: 28,
+  welcomeLogoName: {
+    fontSize: 26,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    letterSpacing: 0.5,
+  },
+
+  // Tagline
+  welcomeTagline: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    lineHeight: 38,
+    marginBottom: 10,
+  },
+  welcomeTaglineSub: {
+    fontSize: 15,
+    color: 'rgba(255,255,255,0.65)',
+    marginBottom: 28,
+  },
+
+  // Trust badges
+  welcomeBadgeRow: {
+    flexDirection: 'row',
+  },
+  welcomeBadge: {
+    backgroundColor: '#5CB85C',
+    borderRadius: 20,
+    paddingHorizontal: 14,
+    paddingVertical: 7,
+    marginRight: 10,
+  },
+  welcomeBadgeText: {
+    color: '#FFFFFF',
+    fontSize: 13,
+    fontWeight: '600',
+  },
+
+  // ── Bottom panel ──
+  welcomeBottom: {
+    flex: 1,
+    backgroundColor: '#F5F7FA',
+    borderTopLeftRadius: 28,
+    borderTopRightRadius: 28,
+    paddingHorizontal: 24,
+    paddingTop: 32,
+    paddingBottom: 32,
+  },
+  welcomeBottomTitle: {
+    fontSize: 22,
     fontWeight: 'bold',
     color: '#2C3E50',
-    textAlign: 'center',
-    marginBottom: 20,
-    paddingHorizontal: 20,
+    marginBottom: 6,
   },
-  locationIcon: {
-    fontSize: 60,
-    marginVertical: 20,
+  welcomeBottomSub: {
+    fontSize: 14,
+    color: '#7F8C8D',
+    marginBottom: 24,
   },
-  infoBox: {
-    backgroundColor: '#FFF',
-    padding: 15,
+
+  // Phone input
+  welcomePhoneRow: {
+    flexDirection: 'row',
+    marginBottom: 14,
+  },
+  welcomeCodeBox: {
+    backgroundColor: '#FFFFFF',
     borderRadius: 12,
-    marginTop: 20,
-    minWidth: 200,
-    alignItems: 'center',
+    paddingHorizontal: 14,
+    paddingVertical: 14,
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+    marginRight: 10,
+    justifyContent: 'center',
+  },
+  welcomeCodeText: {
+    fontSize: 15,
+    color: '#2C3E50',
+    fontWeight: '600',
+  },
+  welcomePhoneInput: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    fontSize: 16,
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+    color: '#2C3E50',
+  },
+
+  // Picker
+  welcomePickerDropdown: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+    marginBottom: 12,
+    elevation: 4,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3,
   },
-  infoLabel: {
-    color: '#7F8C8D',
+  welcomePickerItem: {
+    padding: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F0F0F0',
+  },
+  welcomePickerItemText: {
+    fontSize: 15,
+    color: '#2C3E50',
+  },
+
+  // Error
+  welcomeErrorText: {
+    color: '#E74C3C',
+    fontSize: 13,
+    marginBottom: 10,
+    marginLeft: 2,
+  },
+
+  // OTP button
+  welcomeOtpBtn: {
+    backgroundColor: '#4A90E2',
+    borderRadius: 14,
+    paddingVertical: 16,
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  welcomeOtpBtnText: {
+    color: '#FFFFFF',
+    fontSize: 17,
+    fontWeight: 'bold',
+    letterSpacing: 0.3,
+  },
+
+  // Why link
+  welcomeWhyLink: {
+    alignItems: 'center',
+  },
+  welcomeWhyLinkText: {
+    color: '#4A90E2',
     fontSize: 14,
   },
-  infoValue: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#2C3E50',
-    marginTop: 5,
-  },
-  bottomSection: {
-    paddingBottom: 20,
+
+  locationIcon: {
+    fontSize: 60,
+    marginVertical: 20,
   },
   primaryButton: {
     backgroundColor: '#4A90E2',
@@ -155,8 +322,8 @@ const styles = StyleSheet.create({
     borderColor: '#E0E0E0',
   },
   ageButtonActive: {
-    backgroundColor: '#4A90E2',
-    borderColor: '#4A90E2',
+    backgroundColor: '#FFB74D',
+    borderColor: '#FFB74D',
   },
   ageButtonText: {
     color: '#2C3E50',
@@ -323,14 +490,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
   },
-  tabIcon: {
-    fontSize: 24,
-    marginBottom: 5,
-  },
-  tabText: {
-    fontSize: 12,
-    color: '#2C3E50',
-  },
+
+
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
@@ -343,20 +504,7 @@ const styles = StyleSheet.create({
     color: '#7F8C8D',
     marginBottom: 15,
   },
-  jobCard: {
-    backgroundColor: '#FFF',
-    borderRadius: 12,
-    padding: 15,
-    marginBottom: 15,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  jobCardLeft: {
-    flex: 1,
-  },
+ 
   jobCardHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -436,10 +584,6 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     marginBottom: 15,
   },
-  statusText: {
-    color: '#2C3E50',
-    fontWeight: 'bold',
-  },
   mapPlaceholder: {
     backgroundColor: '#E8F4F8',
     height: 150,
@@ -469,105 +613,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#4A90E2',
     width: 24,
   },
-  ratingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginTop: 30,
-    paddingHorizontal: 20,
-  },
-  ratingItem: {
-    alignItems: 'center',
-  },
-  ratingCircle: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#E0E0E0',
-    marginBottom: 8,
-  },
-  ratingCircleActive: {
-    backgroundColor: '#5CB85C',
-  },
-  ratingLabel: {
-    fontSize: 12,
-    color: '#7F8C8D',
-    textAlign: 'center',
-  },
-  ratingLine: {
-    flex: 1,
-    height: 2,
-    backgroundColor: '#E0E0E0',
-    marginHorizontal: -10,
-  },
+
+
   tabRow: {
     flexDirection: 'row',
     marginBottom: 20,
   },
-  tabItem: {
-    flex: 1,
-    padding: 12,
-    alignItems: 'center',
-    backgroundColor: '#FFF',
-    marginHorizontal: 5,
-    borderRadius: 8,
-  },
-  tabItemActive: {
-    flex: 1,
-    padding: 12,
-    alignItems: 'center',
-    backgroundColor: '#4A90E2',
-    marginHorizontal: 5,
-    borderRadius: 8,
-  },
-  tabItemText: {
-    color: '#7F8C8D',
-    fontSize: 14,
-  },
-  tabItemActiveText: {
-    color: '#FFF',
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
-  activeJobCard: {
-    backgroundColor: '#FFF',
-    borderRadius: 12,
-    padding: 15,
-    marginBottom: 15,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  activeJobHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  activeJobTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#2C3E50',
-  },
-  activeJobStatus: {
-    fontSize: 14,
-    color: '#FF9800',
-  },
-  activeJobLocation: {
-    fontSize: 14,
-    color: '#7F8C8D',
-    marginBottom: 10,
-  },
-  activeJobDetails: {
-    marginBottom: 10,
-  },
-  activeJobPayment: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#5CB85C',
-  },
+
+
   illustrationContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -864,7 +917,7 @@ const styles = StyleSheet.create({
   ongoingJobMeta: { fontSize: 14, color: '#7F8C8D', marginBottom: 3 },
  
   // ── Status badge ──
-  statusBadge: {
+  jobStatusBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: 8,
@@ -872,8 +925,8 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
     gap: 5,
   },
-  statusDot: { width: 7, height: 7, borderRadius: 4 },
-  statusBadgeText: { fontSize: 13, fontWeight: '600' },
+  jobStatusDot: { width: 7, height: 7, borderRadius: 4 },
+  jobStatusBadgeText: { fontSize: 13, fontWeight: '600' },
  
   // ── Job card action buttons ──
   ongoingJobActions: {
@@ -898,6 +951,274 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   jobBtnDoneText: { fontSize: 14, color: '#27500A', fontWeight: '700' },
+  
+   workTypeCheckBadge: {
+    position: 'absolute',
+    top: 6,
+    right: 6,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: 'rgba(255,255,255,0.35)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  workTypeCheckText: {
+    fontSize: 12,
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+  },
+  otherWorkInput: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#4A90E2',
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    fontSize: 16,
+    color: '#2C3E50',
+  },
+
+
+
+  // ── Worker Review Screen ──
+  pageHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  backBtn: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#2C3E50',
+    marginRight: 12,
+  },
+ 
+  // Overall card
+  overallCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    padding: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+    marginBottom: 20,
+  },
+  overallLeft: {
+    alignItems: 'center',
+    marginRight: 20,
+    minWidth: 80,
+  },
+  overallScore: {
+    fontSize: 48,
+    fontWeight: 'bold',
+    color: '#2C3E50',
+    lineHeight: 56,
+  },
+  overallTotal: {
+    fontSize: 11,
+    color: '#7F8C8D',
+    marginTop: 4,
+    textAlign: 'center',
+  },
+  overallRight: {
+    flex: 1,
+  },
+ 
+  // Rating bar
+  barRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 5,
+  },
+  barLabel: {
+    fontSize: 12,
+    color: '#7F8C8D',
+    width: 28,
+  },
+  barTrack: {
+    flex: 1,
+    height: 6,
+    backgroundColor: '#E0E0E0',
+    borderRadius: 3,
+    marginHorizontal: 8,
+    overflow: 'hidden',
+  },
+  barFill: {
+    height: 6,
+    backgroundColor: '#FFC107',
+    borderRadius: 3,
+  },
+  barCount: {
+    fontSize: 12,
+    color: '#7F8C8D',
+    width: 16,
+    textAlign: 'right',
+  },
+ 
+  // Review card
+  reviewCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 14,
+    padding: 16,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+  },
+  reviewHeader: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: 10,
+  },
+  clientAvatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#4A90E2',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 12,
+  },
+  clientAvatarText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+  },
+  clientName: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: '#2C3E50',
+    marginBottom: 3,
+  },
+  reviewMeta: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  jobType: {
+    fontSize: 12,
+    color: '#4A90E2',
+    fontWeight: '600',
+  },
+  metaDot: {
+    fontSize: 12,
+    color: '#7F8C8D',
+    marginHorizontal: 5,
+  },
+  reviewDate: {
+    fontSize: 12,
+    color: '#7F8C8D',
+  },
+  ratingNum: {
+    fontSize: 11,
+    color: '#7F8C8D',
+    marginTop: 2,
+  },
+  reviewComment: {
+    fontSize: 14,
+    color: '#2C3E50',
+    lineHeight: 20,
+  },
+  
+
+
+
+  // ─────────────────────────────────────────────────────────────────────────────
+// ADD THESE TO YOUR commonStyles.js StyleSheet.create({ ... }) block
+// ─────────────────────────────────────────────────────────────────────────────
+
+  // ── Job progress tracker ──
+  rateProgressRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  rateStepCol: {
+    alignItems: 'center',
+  },
+  rateCircle: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    borderWidth: 2,
+    borderColor: '#E0E0E0',
+    backgroundColor: '#FFFFFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 6,
+  },
+  rateCircleDone: {
+    borderColor: '#5CB85C',
+    backgroundColor: '#5CB85C',
+  },
+  rateCircleCheckText: {
+    fontSize: 16,
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+  },
+  rateCircleInner: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: '#E0E0E0',
+  },
+  rateStepLabel: {
+    fontSize: 12,
+    color: '#7F8C8D',
+    textAlign: 'center',
+  },
+  rateProgressLine: {
+    flex: 1,
+    height: 2,
+    marginHorizontal: 6,
+    marginBottom: 22,
+  },
+
+  // ── Star rating ──
+  rateStarsRow: {
+    flexDirection: 'row',
+    marginBottom: 8,
+  },
+  rateStar: {
+    fontSize: 40,
+    marginRight: 8,
+  },
+  rateStarActive: {
+    color: '#FFC107',
+  },
+  rateStarInactive: {
+    color: '#E0E0E0',
+  },
+
+  // ── Experience buttons ──
+  rateExpRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginBottom: 8,
+  },
+  rateExpBtn: {
+    borderWidth: 1.5,
+    borderColor: '#E0E0E0',
+    borderRadius: 20,
+    paddingHorizontal: 18,
+    paddingVertical: 10,
+    marginRight: 10,
+    marginBottom: 10,
+    backgroundColor: '#FFFFFF',
+  },
+  rateExpBtnActive: {
+    borderColor: '#4A90E2',
+    backgroundColor: '#EAF3FB',
+  },
+  rateExpBtnText: {
+    fontSize: 14,
+    color: '#7F8C8D',
+    fontWeight: '600',
+  },
+  rateExpBtnTextActive: {
+    color: '#4A90E2',
+  },
 });
+
 
 export default styles;
