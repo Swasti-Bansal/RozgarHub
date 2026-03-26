@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { SafeAreaView, View, Text, TouchableOpacity } from 'react-native';
 import styles from '../styles/commonStyles';
 import { useTranslation, _cache } from '../context/TranslationContext';
+import { useUser } from '../context/UserContext';
 
 const WORK_TYPES = [
   { id: 'construction', label: 'Construction', icon: '🏗️', color: '#FF8A65' },
@@ -32,7 +33,11 @@ const translateString = async (text, lang) => {
   return text;
 };
 
-const AboutWorkScreen = ({ navigation }) => {
+const AboutWorkScreen = ({ navigation, route }) => {
+  // ── Pull the name/role/location that GetStartedScreen collected ──
+  const incomingUserData = route?.params?.userData ?? {};
+  const { updateProfile } = useUser();
+
   const [userData, setUserData]         = useState({ workType: '', experience: '' });
   const [translatedLabels, setLabels]   = useState({});
   const [translatedStrings, setStrings] = useState({
@@ -51,25 +56,15 @@ const AboutWorkScreen = ({ navigation }) => {
     let cancelled = false;
 
     const translateAll = async () => {
-      // Translate all static strings + work type labels + exp options in parallel
       const staticKeys = [
-        'About Your Work',
-        'About your work',
-        'Tell us more',
-        'What kind of work do you do?',
-        'Your experience',
-        'Skip for now',
-        'Finish',
+        'About Your Work', 'About your work', 'Tell us more',
+        'What kind of work do you do?', 'Your experience', 'Skip for now', 'Finish',
       ];
+      const workLabels = WORK_TYPES.map(w => w.label);
+      const expLabels  = EXP_OPTIONS;
+      const allStrings = [...staticKeys, ...workLabels, ...expLabels];
 
-      const workLabels  = WORK_TYPES.map(w => w.label);
-      const expLabels   = EXP_OPTIONS;
-      const allStrings  = [...staticKeys, ...workLabels, ...expLabels];
-
-      const results = await Promise.all(
-        allStrings.map(s => translateString(s, currentLang))
-      );
-
+      const results = await Promise.all(allStrings.map(s => translateString(s, currentLang)));
       if (cancelled) return;
 
       const [
@@ -78,11 +73,8 @@ const AboutWorkScreen = ({ navigation }) => {
         ...rest
       ] = results;
 
-      // Map work type labels
       const labelMap = {};
       WORK_TYPES.forEach((w, i) => { labelMap[w.id] = rest[i]; });
-
-      // Map exp options
       const expMap = {};
       EXP_OPTIONS.forEach((e, i) => { expMap[e] = rest[WORK_TYPES.length + i]; });
 
@@ -94,6 +86,22 @@ const AboutWorkScreen = ({ navigation }) => {
     translateAll();
     return () => { cancelled = true; };
   }, [currentLang]);
+
+  // ── Save everything to UserContext and go to Home ────────────────
+  const handleFinish = () => {
+    updateProfile({
+      ...incomingUserData,
+      workType:   userData.workType,
+      experience: userData.experience,
+    });
+    navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
+  };
+
+  // Skip just saves what we already know from GetStartedScreen
+  const handleSkip = () => {
+    updateProfile(incomingUserData);
+    navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -146,16 +154,10 @@ const AboutWorkScreen = ({ navigation }) => {
         </View>
 
         <View style={styles.bottomButtonRow}>
-          <TouchableOpacity
-            style={styles.skipButton}
-            onPress={() => navigation.navigate('Login')}
-          >
+          <TouchableOpacity style={styles.skipButton} onPress={handleSkip}>
             <Text style={styles.skipButtonText}>{translatedStrings.skip}</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.finishButton}
-            onPress={() => navigation.navigate('Home')}
-          >
+          <TouchableOpacity style={styles.finishButton} onPress={handleFinish}>
             <Text style={styles.finishButtonText}>{translatedStrings.finish}</Text>
           </TouchableOpacity>
         </View>
