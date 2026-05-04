@@ -18,18 +18,18 @@ import T from '../components/T';
 import useTranslatedText from '../hooks/useTranslatedText';
 
 const COUNTRY_CODES = [
-  { code: '+91',  flag: '🇮🇳', name: 'India' },
-  { code: '+1',   flag: '🇺🇸', name: 'USA'   },
-  { code: '+44',  flag: '🇬🇧', name: 'UK'    },
-  { code: '+971', flag: '🇦🇪', name: 'UAE'   },
+  { code: '+91', flag: '🇮🇳', name: 'India' },
+  { code: '+1', flag: '🇺🇸', name: 'USA' },
+  { code: '+44', flag: '🇬🇧', name: 'UK' },
+  { code: '+971', flag: '🇦🇪', name: 'UAE' },
 ];
 
 const WelcomeScreen = ({ navigation }) => {
-  const [phoneNumber, setPhoneNumber]   = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [selectedCode, setSelectedCode] = useState(COUNTRY_CODES[0]);
-  const [showPicker, setShowPicker]     = useState(false);
-  const [loading, setLoading]           = useState(false);
-  const [error, setError]               = useState('');
+  const [showPicker, setShowPicker] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   // ── Translated placeholder from old version ──
   const [placeholderMobile] = useTranslatedText('Enter mobile number');
@@ -46,7 +46,10 @@ const WelcomeScreen = ({ navigation }) => {
     const { success, confirmation, error: errMsg } = await sendOTP(fullNumber);
     setLoading(false);
     if (success) {
-      navigation.navigate('OTPVerify', { confirmation, phoneNumber: fullNumber });
+      navigation.navigate('OTPVerify', {
+        confirmation,
+        phoneNumber: fullNumber,
+      });
     } else {
       setError(errMsg);
     }
@@ -63,7 +66,6 @@ const WelcomeScreen = ({ navigation }) => {
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
-
           {/* ── Hero ── */}
           <View style={styles.welcomeHero}>
             <View style={styles.welcomeDecorCircle1} />
@@ -85,7 +87,7 @@ const WelcomeScreen = ({ navigation }) => {
 
             {/* Tagline — using T for translation ── */}
             <T style={styles.welcomeTagline}>
-              Find trusted work{'\n'}near you, instantly
+              Find trusted work near you, instantly
             </T>
             <T style={styles.welcomeTaglineSub}>
               Connecting skilled workers with local jobs
@@ -94,19 +96,20 @@ const WelcomeScreen = ({ navigation }) => {
             {/* Trust badges */}
             <View style={styles.welcomeBadgeRow}>
               <View style={styles.welcomeBadge}>
-                <T style={styles.welcomeBadgeText}>✓  Free to join</T>
+                <T style={styles.welcomeBadgeText}>✓ Free to join</T>
               </View>
               <View style={styles.welcomeBadge}>
-                <T style={styles.welcomeBadgeText}>✓  Work on your schedule</T>
+                <T style={styles.welcomeBadgeText}>✓ Work on your schedule</T>
               </View>
             </View>
           </View>
 
           {/* ── Bottom input panel ── */}
           <View style={styles.welcomeBottom}>
-
             <T style={styles.welcomeBottomTitle}>Enter your mobile number</T>
-            <T style={styles.welcomeBottomSub}>We'll send you a one-time verification code</T>
+            <T style={styles.welcomeBottomSub}>
+              We'll send you a one-time verification code
+            </T>
 
             <View style={styles.welcomePhoneRow}>
               <TouchableOpacity
@@ -124,7 +127,10 @@ const WelcomeScreen = ({ navigation }) => {
                 keyboardType="phone-pad"
                 maxLength={13}
                 value={phoneNumber}
-                onChangeText={(t) => { setError(''); setPhoneNumber(t); }}
+                onChangeText={t => {
+                  setError('');
+                  setPhoneNumber(t);
+                }}
                 color="#2C3E50"
                 selectionColor="#4A90E2"
               />
@@ -132,14 +138,17 @@ const WelcomeScreen = ({ navigation }) => {
 
             {showPicker && (
               <View style={styles.welcomePickerDropdown}>
-                {COUNTRY_CODES.map((c) => (
+                {COUNTRY_CODES.map(c => (
                   <TouchableOpacity
                     key={c.code}
                     style={styles.welcomePickerItem}
-                    onPress={() => { setSelectedCode(c); setShowPicker(false); }}
+                    onPress={() => {
+                      setSelectedCode(c);
+                      setShowPicker(false);
+                    }}
                   >
                     <Text style={styles.welcomePickerItemText}>
-                      {c.flag}  {c.name}  ({c.code})
+                      {c.flag} {c.name} ({c.code})
                     </Text>
                   </TouchableOpacity>
                 ))}
@@ -154,16 +163,18 @@ const WelcomeScreen = ({ navigation }) => {
               disabled={loading}
               activeOpacity={0.85}
             >
-              {loading
-                ? <ActivityIndicator color="#FFF" />
-                : <T style={styles.welcomeOtpBtnText}>Send OTP  →</T>
-              }
+              {loading ? (
+                <ActivityIndicator color="#FFF" />
+              ) : (
+                <T style={styles.welcomeOtpBtnText}>Send OTP →</T>
+              )}
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.welcomeWhyLink}>
-              <T style={styles.welcomeWhyLinkText}>Why do we need your number?</T>
+              <T style={styles.welcomeWhyLinkText}>
+                Why do we need your number?
+              </T>
             </TouchableOpacity>
-
           </View>
 
         </ScrollView>

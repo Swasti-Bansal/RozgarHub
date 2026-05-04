@@ -6,7 +6,7 @@ import {
   View, Text, ScrollView, TouchableOpacity,
   StyleSheet, StatusBar, SafeAreaView, Alert, Switch, TextInput, ActivityIndicator,
 } from 'react-native';
-import { postJob } from '../services/dbService'; 
+import { postJob } from '../services/dbService';
 
 const JOB_CATEGORIES = [
   { label: 'Mason',       icon: '🧱', color: '#FF6B6B' },
@@ -85,7 +85,7 @@ export default function PostJobScreen({ navigation }) {
         `Your job "${title}" is live! Workers will contact you shortly.`,
         [
           { text: 'Find Workers', onPress: () => navigation?.navigate('FindWorkers') },
-          { text: 'OK', style: 'cancel' },
+          { text: 'OK', onPress: () => navigation?.navigate('EmployerHome') },
         ]
       );
     } else {
